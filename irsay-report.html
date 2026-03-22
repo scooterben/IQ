@@ -3,870 +3,845 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Irsay Collection — DIG Intelligence Research</title>
+<title>Irsay Collection — Market Analysis · Dig Appraisals</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
   :root {
-    --gold: #C9A84C;
-    --gold-dim: rgba(201,168,76,0.15);
-    --gold-border: rgba(201,168,76,0.25);
-    --navy: #0A0F1A;
-    --navy-card: #0F1623;
-    --navy-raised: #141D2E;
-    --text-1: #EDE8DF;
-    --text-2: #7A7870;
-    --text-3: #3E3D38;
-    --green: #4CAF80;
-    --green-dim: rgba(76,175,128,0.12);
-    --red: #C0392B;
-    --border: rgba(255,255,255,0.07);
-    --mono: 'DM Mono', monospace;
-    --serif: 'EB Garamond', Georgia, serif;
+    --cream: #FAF8F4;
+    --white: #FFFFFF;
+    --ink: #1A1814;
+    --ink-mid: #3D3A34;
+    --ink-light: #7A7670;
+    --ink-faint: #B8B4AC;
+    --rule: #E2DED8;
+    --rule-light: #EEEBE6;
+    --gold: #8C6D2F;
+    --gold-mid: #B08D3A;
+    --gold-bg: #F7F1E4;
+    --green: #2D6645;
+    --green-bg: #EBF4EF;
+    --red: #8C2D2D;
+    --serif: 'Playfair Display', Georgia, serif;
+    --sans: 'Jost', 'Helvetica Neue', sans-serif;
   }
 
   html { scroll-behavior: smooth; }
 
   body {
-    background: var(--navy);
-    color: var(--text-1);
-    font-family: var(--serif);
-    font-size: 16px;
-    line-height: 1.6;
-    min-height: 100vh;
+    background: var(--cream);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 15px;
+    line-height: 1.65;
   }
 
-  /* ─── SITE HEADER (matching dig-intelligence) ─── */
+  /* ── HEADER ── */
   .site-header {
-    position: sticky;
-    top: 0;
-    z-index: 100;
-    background: rgba(10,15,26,0.92);
-    backdrop-filter: blur(12px);
-    border-bottom: 1px solid var(--border);
+    background: var(--white);
+    border-bottom: 1px solid var(--rule);
+    padding: 0 48px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0 32px;
-    height: 52px;
+    height: 66px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
   }
 
-  .site-logo {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    text-decoration: none;
-  }
+  .logo-wrap { text-decoration: none; }
 
-  .logo-mark {
-    width: 22px;
-    height: 22px;
-    border: 1.5px solid var(--gold);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .logo-mark span {
-    font-family: var(--mono);
-    font-size: 11px;
+  .logo-name {
+    font-family: var(--serif);
+    font-size: 20px;
     font-weight: 500;
-    color: var(--gold);
+    color: var(--ink);
+    display: block;
+    line-height: 1;
   }
 
-  .logo-text {
-    font-family: var(--mono);
-    font-size: 12px;
-    font-weight: 500;
-    letter-spacing: 2px;
-    color: var(--text-1);
+  .logo-sub {
+    font-family: var(--sans);
+    font-size: 9px;
+    font-weight: 300;
+    letter-spacing: 2.5px;
     text-transform: uppercase;
+    color: var(--ink-faint);
+    display: block;
+    margin-top: 3px;
   }
 
-  .site-nav {
+  nav {
     display: flex;
     align-items: center;
-    gap: 24px;
+    gap: 30px;
   }
 
-  .site-nav a {
-    font-family: var(--mono);
+  nav a {
+    font-family: var(--sans);
     font-size: 11px;
+    font-weight: 400;
     letter-spacing: 1.5px;
     text-transform: uppercase;
-    color: var(--text-2);
+    color: var(--ink-light);
     text-decoration: none;
     transition: color 0.2s;
   }
 
-  .site-nav a:hover,
-  .site-nav a.active { color: var(--text-1); }
+  nav a:hover, nav a.active { color: var(--ink); }
 
-  .nav-cta {
-    font-family: var(--mono);
+  nav .cta-btn {
+    border: 1px solid var(--ink);
+    padding: 8px 18px;
+    color: var(--ink);
     font-size: 10px;
-    letter-spacing: 1.5px;
+    letter-spacing: 2px;
+    transition: background 0.2s, color 0.2s;
+  }
+  nav .cta-btn:hover { background: var(--ink); color: var(--white); }
+
+  /* ── HERO ── */
+  .hero {
+    background: var(--white);
+    border-bottom: 1px solid var(--rule);
+    padding: 64px 80px 56px;
+    display: grid;
+    grid-template-columns: 1fr 320px;
+    gap: 72px;
+    align-items: end;
+  }
+
+  .hero-eyebrow {
+    font-family: var(--sans);
+    font-size: 9px;
+    font-weight: 500;
+    letter-spacing: 3px;
     text-transform: uppercase;
-    color: var(--gold) !important;
-    border: 1px solid var(--gold-border);
-    padding: 5px 12px;
-  }
-
-  /* ─── REPORT HERO ─── */
-  .report-hero {
-    border-bottom: 1px solid var(--border);
-    padding: 40px 32px 32px;
-    background: var(--navy-card);
-    position: relative;
-    overflow: hidden;
-  }
-
-  .report-hero::before {
-    content: '';
-    position: absolute;
-    top: 0; right: 0;
-    width: 400px; height: 400px;
-    background: radial-gradient(ellipse at top right, rgba(201,168,76,0.04) 0%, transparent 70%);
-    pointer-events: none;
-  }
-
-  .report-meta {
+    color: var(--gold-mid);
+    margin-bottom: 18px;
     display: flex;
     align-items: center;
-    gap: 16px;
-    margin-bottom: 20px;
+    gap: 14px;
   }
 
-  .report-tag {
-    font-family: var(--mono);
-    font-size: 9px;
-    letter-spacing: 3px;
-    color: var(--gold);
-    text-transform: uppercase;
+  .hero-eyebrow::before {
+    content: '';
+    display: inline-block;
+    width: 28px;
+    height: 1px;
+    background: var(--gold-mid);
   }
 
-  .report-date {
-    font-family: var(--mono);
-    font-size: 9px;
-    letter-spacing: 2px;
-    color: var(--text-2);
-    text-transform: uppercase;
-  }
-
-  .meta-sep {
-    width: 1px;
-    height: 10px;
-    background: var(--text-3);
-  }
-
-  .report-title {
-    font-size: clamp(26px, 4vw, 42px);
+  .hero-title {
+    font-family: var(--serif);
+    font-size: clamp(30px, 3.8vw, 54px);
     font-weight: 400;
-    font-style: italic;
-    color: var(--text-1);
-    line-height: 1.15;
+    line-height: 1.1;
     letter-spacing: -0.5px;
-    margin-bottom: 10px;
-    max-width: 700px;
-  }
-
-  .report-deck {
-    font-size: 14px;
-    color: var(--text-2);
-    font-family: var(--mono);
-    font-weight: 300;
-    max-width: 640px;
-    line-height: 1.6;
+    color: var(--ink);
     margin-bottom: 22px;
   }
 
-  .report-chips {
+  .hero-title em {
+    font-style: italic;
+    color: var(--gold);
+  }
+
+  .hero-deck {
+    font-family: var(--sans);
+    font-size: 14px;
+    font-weight: 300;
+    color: var(--ink-light);
+    max-width: 540px;
+    line-height: 1.85;
+    margin-bottom: 30px;
+  }
+
+  .hero-chips {
     display: flex;
-    align-items: center;
-    gap: 10px;
     flex-wrap: wrap;
+    gap: 8px;
   }
 
   .chip {
-    font-family: var(--mono);
-    font-size: 10px;
-    letter-spacing: 1.5px;
+    font-family: var(--sans);
+    font-size: 9px;
+    font-weight: 500;
+    letter-spacing: 2px;
     text-transform: uppercase;
-    padding: 4px 10px;
-    border-radius: 2px;
+    padding: 5px 12px;
+    border: 1px solid;
   }
 
-  .chip-buy {
-    background: rgba(76,175,128,0.15);
-    color: var(--green);
-    border: 1px solid rgba(76,175,128,0.3);
+  .chip-green  { border-color: var(--green); color: var(--green); background: var(--green-bg); }
+  .chip-plain  { border-color: var(--rule);  color: var(--ink-light); }
+
+  .hero-aside {
+    border-left: 1px solid var(--rule);
+    padding-left: 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    padding-bottom: 4px;
   }
 
-  .chip-sector {
-    background: transparent;
-    color: var(--text-2);
-    border: 1px solid var(--text-3);
+  .aside-label {
+    font-family: var(--sans);
+    font-size: 9px;
+    font-weight: 400;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin-bottom: 5px;
   }
 
-  /* ─── LAYOUT ─── */
+  .aside-value {
+    font-family: var(--serif);
+    font-size: 34px;
+    font-weight: 400;
+    color: var(--ink);
+    line-height: 1;
+  }
+
+  .aside-hint {
+    font-family: var(--sans);
+    font-size: 11px;
+    font-weight: 300;
+    color: var(--ink-light);
+    margin-top: 4px;
+  }
+
+  .aside-hint.up { color: var(--green); }
+
+  .aside-rule { height: 1px; background: var(--rule); }
+
+  /* ── MAIN ── */
   .report-body {
-    max-width: 1200px;
+    max-width: 1080px;
     margin: 0 auto;
-    padding: 0 32px 80px;
+    padding: 0 48px 80px;
   }
 
   .section {
-    padding: 32px 0;
-    border-bottom: 1px solid var(--border);
+    padding: 52px 0;
+    border-bottom: 1px solid var(--rule);
   }
 
   .section:last-child { border-bottom: none; }
 
-  .section-label {
-    font-family: var(--mono);
+  .s-eye {
+    font-family: var(--sans);
     font-size: 9px;
+    font-weight: 400;
     letter-spacing: 3px;
-    color: var(--gold);
     text-transform: uppercase;
-    margin-bottom: 20px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
+    color: var(--ink-faint);
+    margin-bottom: 6px;
   }
 
-  .section-label::after {
-    content: '';
-    flex: 1;
-    height: 1px;
-    background: var(--gold-border);
+  .s-head {
+    font-family: var(--serif);
+    font-size: 28px;
+    font-weight: 400;
+    color: var(--ink);
+    margin-bottom: 32px;
   }
 
-  /* ─── SUMMARY METRICS ─── */
-  .metrics-grid {
+  /* ── METRICS ── */
+  .metrics-row {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 1px;
-    background: var(--border);
-    border: 1px solid var(--border);
-    margin-bottom: 24px;
+    background: var(--rule);
+    border: 1px solid var(--rule);
+    margin-bottom: 36px;
   }
 
-  .metric-card {
-    background: var(--navy-card);
-    padding: 20px 22px;
+  .metric-cell {
+    background: var(--white);
+    padding: 24px 24px 22px;
   }
 
-  .metric-label {
-    font-family: var(--mono);
+  .m-label {
+    font-family: var(--sans);
     font-size: 9px;
-    letter-spacing: 2px;
-    color: var(--text-2);
+    font-weight: 400;
+    letter-spacing: 2.5px;
     text-transform: uppercase;
-    margin-bottom: 8px;
+    color: var(--ink-faint);
+    margin-bottom: 9px;
   }
 
-  .metric-value {
-    font-size: 28px;
-    color: var(--text-1);
-    font-family: var(--mono);
-    font-weight: 300;
+  .m-val {
+    font-family: var(--serif);
+    font-size: 34px;
+    font-weight: 400;
+    color: var(--ink);
     line-height: 1;
     margin-bottom: 6px;
   }
 
-  .metric-sub {
-    font-family: var(--mono);
-    font-size: 10px;
-    color: var(--green);
-  }
+  .m-hint { font-family: var(--sans); font-size: 11px; font-weight: 300; color: var(--ink-light); }
+  .m-hint.up { color: var(--green); }
 
-  .metric-sub.neutral { color: var(--text-2); }
-
-  /* ─── CALLOUT BOXES ─── */
+  /* ── CALLOUTS ── */
   .callouts-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 16px;
-    margin-bottom: 24px;
+    gap: 1px;
+    background: var(--rule);
+    border: 1px solid var(--rule);
+    margin-bottom: 36px;
   }
 
   .callout {
-    background: var(--navy-card);
-    border: 1px solid var(--border);
-    border-top: 2px solid transparent;
-    padding: 18px 20px;
+    background: var(--white);
+    padding: 30px 28px 26px;
     position: relative;
   }
 
-  .callout-alpha { border-top-color: var(--gold); }
-  .callout-risk  { border-top-color: var(--red); }
-  .callout-signal { border-top-color: var(--green); }
+  .callout::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+  }
+  .callout-a::before { background: var(--gold-mid); }
+  .callout-s::before { background: var(--green); }
+  .callout-r::before { background: var(--red); }
 
-  .callout-type {
-    font-family: var(--mono);
+  .c-tag {
+    font-family: var(--sans);
     font-size: 8px;
+    font-weight: 500;
     letter-spacing: 3px;
     text-transform: uppercase;
-    margin-bottom: 8px;
+    margin-bottom: 12px;
   }
 
-  .callout-alpha .callout-type { color: var(--gold); }
-  .callout-risk .callout-type  { color: #C0392B; }
-  .callout-signal .callout-type { color: var(--green); }
+  .callout-a .c-tag { color: var(--gold); }
+  .callout-s .c-tag { color: var(--green); }
+  .callout-r .c-tag { color: var(--red); }
 
-  .callout-headline {
-    font-size: 15px;
+  .c-head {
+    font-family: var(--serif);
+    font-size: 17px;
     font-style: italic;
-    color: var(--text-1);
     line-height: 1.4;
-    margin-bottom: 8px;
+    color: var(--ink);
+    margin-bottom: 12px;
   }
 
-  .callout-body {
-    font-family: var(--mono);
-    font-size: 11px;
-    color: var(--text-2);
-    line-height: 1.7;
+  .c-body {
+    font-family: var(--sans);
+    font-size: 12px;
     font-weight: 300;
+    color: var(--ink-light);
+    line-height: 1.8;
   }
 
-  .callout-stat {
+  .c-stat {
     display: flex;
     align-items: baseline;
-    gap: 6px;
-    margin-top: 12px;
-    padding-top: 12px;
-    border-top: 1px solid var(--border);
+    gap: 8px;
+    margin-top: 20px;
+    padding-top: 16px;
+    border-top: 1px solid var(--rule-light);
   }
 
-  .callout-stat-num {
-    font-family: var(--mono);
-    font-size: 18px;
+  .c-num {
+    font-family: var(--serif);
+    font-size: 28px;
     font-weight: 400;
+    line-height: 1;
   }
 
-  .callout-alpha .callout-stat-num { color: var(--gold); }
-  .callout-risk .callout-stat-num  { color: #C0392B; }
-  .callout-signal .callout-stat-num { color: var(--green); }
+  .callout-a .c-num { color: var(--gold); }
+  .callout-s .c-num { color: var(--green); }
+  .callout-r .c-num { color: var(--red); }
 
-  .callout-stat-desc {
-    font-family: var(--mono);
-    font-size: 10px;
-    color: var(--text-2);
-  }
+  .c-desc { font-family: var(--sans); font-size: 11px; font-weight: 300; color: var(--ink-light); }
 
-  /* ─── PULLQUOTE ─── */
+  /* ── PULLQUOTE ── */
   .pullquote {
-    border-left: 2px solid var(--gold);
-    padding: 18px 24px;
-    background: var(--gold-dim);
-    font-size: 15px;
+    border-left: 3px solid var(--gold-mid);
+    padding: 22px 32px;
+    background: var(--gold-bg);
+  }
+
+  .pullquote p {
+    font-family: var(--serif);
+    font-size: 16px;
     font-style: italic;
-    color: var(--text-2);
-    line-height: 1.75;
-    margin-bottom: 24px;
+    color: var(--ink-mid);
+    line-height: 1.85;
   }
 
   .pullquote cite {
     display: block;
-    margin-top: 10px;
-    font-family: var(--mono);
+    margin-top: 12px;
+    font-family: var(--sans);
     font-size: 9px;
+    font-weight: 500;
     letter-spacing: 2px;
-    color: var(--gold);
-    font-style: normal;
     text-transform: uppercase;
+    color: var(--gold-mid);
+    font-style: normal;
   }
 
-  /* ─── TWO COL ─── */
+  /* ── TWO COL ── */
   .two-col {
     display: grid;
-    grid-template-columns: 1.4fr 1fr;
-    gap: 32px;
+    grid-template-columns: 1.35fr 1fr;
+    gap: 56px;
     align-items: start;
   }
 
-  /* ─── SECTOR TABLE ─── */
-  .sector-row {
-    display: grid;
-    grid-template-columns: 140px 1fr 72px 72px 72px;
-    align-items: center;
-    gap: 12px;
-    padding: 11px 0;
-    border-bottom: 1px solid rgba(255,255,255,0.04);
-    font-size: 12px;
-  }
+  /* ── SECTOR TABLE ── */
+  .sector-tbl { width: 100%; border-collapse: collapse; }
 
-  .sector-row.header {
-    padding-bottom: 8px;
-    border-bottom: 1px solid var(--gold-border);
-  }
-
-  .sector-row.header span {
-    font-family: var(--mono);
+  .sector-tbl th {
+    font-family: var(--sans);
     font-size: 8px;
-    letter-spacing: 2px;
-    color: var(--gold);
-    text-transform: uppercase;
-  }
-
-  .sector-name {
-    font-family: var(--mono);
-    font-size: 11px;
-    color: var(--text-1);
-  }
-
-  .sector-bar-track {
-    height: 2px;
-    background: rgba(255,255,255,0.06);
-    border-radius: 1px;
-    position: relative;
-  }
-
-  .sector-bar-fill {
-    position: absolute;
-    top: 0; left: 0;
-    height: 100%;
-    border-radius: 1px;
-    background: var(--gold);
-    transition: width 1s ease;
-  }
-
-  .sector-bar-fill.dim { background: var(--text-3); }
-
-  .sector-num {
-    font-family: var(--mono);
-    font-size: 11px;
-    text-align: right;
-  }
-
-  .sector-num.pos { color: var(--green); }
-  .sector-num.neg { color: var(--red); }
-  .sector-num.neutral { color: var(--text-2); }
-
-  /* ─── DONUT WRAPPER ─── */
-  .chart-outer {
-    display: flex;
-    flex-direction: column;
-    gap: 0;
-  }
-
-  .chart-outer .section-label { margin-bottom: 16px; }
-
-  .donut-wrap {
-    position: relative;
-    height: 200px;
-  }
-
-  .donut-legend {
-    margin-top: 16px;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 8px;
-  }
-
-  .legend-item {
-    display: flex;
-    align-items: center;
-    gap: 7px;
-    font-family: var(--mono);
-    font-size: 10px;
-    color: var(--text-2);
-  }
-
-  .legend-dot {
-    width: 7px;
-    height: 7px;
-    border-radius: 1px;
-    flex-shrink: 0;
-  }
-
-  /* ─── PERFORMANCE TABLE ─── */
-  .perf-table {
-    width: 100%;
-    border-collapse: collapse;
-  }
-
-  .perf-table thead tr {
-    border-bottom: 1px solid var(--gold-border);
-  }
-
-  .perf-table th {
-    font-family: var(--mono);
-    font-size: 8px;
-    letter-spacing: 2px;
-    color: var(--gold);
-    text-transform: uppercase;
-    text-align: left;
-    padding: 0 12px 12px 0;
     font-weight: 400;
-    white-space: nowrap;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    text-align: left;
+    padding: 0 0 12px;
+    border-bottom: 1px solid var(--ink);
   }
 
-  .perf-table th:last-child,
-  .perf-table th.r { text-align: right; padding-right: 0; }
+  .sector-tbl th.r { text-align: right; }
 
-  .perf-table td {
-    padding: 13px 12px 13px 0;
-    border-bottom: 1px solid rgba(255,255,255,0.04);
+  .sector-tbl td {
+    padding: 11px 0;
+    border-bottom: 1px solid var(--rule-light);
     vertical-align: middle;
   }
 
-  .perf-table td:last-child { padding-right: 0; }
+  .sector-tbl tr:last-child td { border-bottom: none; }
 
-  .lot-title {
-    font-family: var(--mono);
-    font-size: 11px;
-    color: var(--text-1);
-    display: block;
-    margin-bottom: 2px;
+  .sn { font-family: var(--sans); font-size: 12px; color: var(--ink); width: 126px; }
+
+  .bar-t { height: 2px; background: var(--rule-light); border-radius: 1px; position: relative; min-width: 60px; }
+
+  .bar-f {
+    position: absolute; top: 0; left: 0;
+    height: 100%; border-radius: 1px;
+    background: var(--gold-mid);
   }
 
-  .lot-sub {
-    font-family: var(--mono);
-    font-size: 9px;
-    color: var(--text-2);
-  }
+  .bar-f.dim { background: var(--ink-faint); }
 
-  .td-mono {
-    font-family: var(--mono);
-    font-size: 11px;
-    color: var(--text-2);
-    text-align: right;
-    white-space: nowrap;
-  }
-
-  .td-mono.pos { color: var(--green); }
-  .td-mono.neg { color: var(--red); }
-  .td-mono.gold { color: var(--gold); }
-
-  .cagr-cell {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    justify-content: flex-end;
-  }
-
-  .cagr-pip {
-    height: 3px;
-    background: var(--gold);
-    border-radius: 1px;
-    flex-shrink: 0;
-  }
+  .nc { font-family: var(--sans); font-size: 11px; text-align: right; padding-left: 10px; white-space: nowrap; }
+  .nc.up { color: var(--green); }
+  .nc.dim { color: var(--ink-faint); }
 
   .badge {
-    font-family: var(--mono);
+    font-family: var(--sans);
     font-size: 8px;
+    font-weight: 500;
     letter-spacing: 1.5px;
     text-transform: uppercase;
-    padding: 3px 7px;
-    border-radius: 1px;
+    padding: 3px 8px;
+    border: 1px solid;
   }
 
-  .badge-buy {
-    background: rgba(76,175,128,0.12);
-    color: var(--green);
-    border: 1px solid rgba(76,175,128,0.25);
+  .b-buy  { border-color: var(--green); color: var(--green); background: var(--green-bg); }
+  .b-hold { border-color: var(--rule);  color: var(--ink-faint); }
+
+  /* ── CHART PANEL ── */
+  .panel-label {
+    font-family: var(--sans);
+    font-size: 9px;
+    font-weight: 400;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin-bottom: 16px;
   }
 
-  .badge-hold {
-    background: var(--gold-dim);
-    color: var(--gold);
-    border: 1px solid var(--gold-border);
+  .donut-wrap { position: relative; height: 190px; }
+
+  .donut-legend {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px 16px;
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid var(--rule);
   }
 
-  /* ─── SCATTER CHART ─── */
-  .chart-container {
-    position: relative;
-    width: 100%;
-    height: 280px;
-  }
-
-  /* ─── FOOTNOTE ─── */
-  .report-footer {
-    border-top: 1px solid var(--border);
-    padding: 20px 32px;
+  .leg-row {
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    gap: 24px;
+    gap: 7px;
+    font-family: var(--sans);
+    font-size: 11px;
+    font-weight: 300;
+    color: var(--ink-light);
   }
 
-  .footer-disclaimer {
-    font-family: var(--mono);
-    font-size: 9px;
-    color: var(--text-3);
-    line-height: 1.7;
-    letter-spacing: 0.3px;
-    max-width: 700px;
+  .leg-sw { width: 8px; height: 8px; border-radius: 1px; flex-shrink: 0; }
+
+  .hold-block {
+    margin-top: 28px;
+    padding-top: 24px;
+    border-top: 1px solid var(--rule);
   }
 
-  .footer-brand {
-    font-family: var(--mono);
+  .hold-canvas { position: relative; height: 130px; }
+
+  /* ── PERF TABLE ── */
+  .perf-tbl { width: 100%; border-collapse: collapse; }
+
+  .perf-tbl thead tr { border-bottom: 1px solid var(--ink); }
+
+  .perf-tbl th {
+    font-family: var(--sans);
+    font-size: 8px;
+    font-weight: 400;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    text-align: left;
+    padding: 0 16px 12px 0;
+  }
+
+  .perf-tbl th.r { text-align: right; padding-right: 0; }
+
+  .perf-tbl td {
+    padding: 14px 16px 14px 0;
+    border-bottom: 1px solid var(--rule-light);
+    vertical-align: middle;
+  }
+
+  .perf-tbl td:last-child { padding-right: 0; }
+
+  .perf-tbl tr:last-child td { border-bottom: none; }
+
+  .lot-n { font-family: var(--sans); font-size: 12px; color: var(--ink); display: block; margin-bottom: 2px; }
+  .lot-s { font-family: var(--sans); font-size: 10px; font-weight: 300; color: var(--ink-faint); }
+
+  .tn { font-family: var(--sans); font-size: 11px; text-align: right; color: var(--ink-light); white-space: nowrap; }
+  .tn.up { color: var(--green); }
+
+  .cagr-wrap { display: flex; align-items: center; gap: 8px; justify-content: flex-end; }
+  .cagr-pip { height: 2px; border-radius: 1px; background: var(--gold-mid); flex-shrink: 0; }
+  .cagr-pip.dim { background: var(--ink-faint); }
+
+  .sep-r td {
+    padding: 6px 0;
+    background: var(--cream);
+    border-bottom: none;
+  }
+
+  .sep-r-label {
+    font-family: var(--sans);
+    font-size: 8px;
+    font-weight: 400;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    text-align: center;
+  }
+
+  /* ── FOOTER ── */
+  .site-footer {
+    background: var(--ink);
+    padding: 36px 80px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    align-items: center;
+    border-top: 1px solid rgba(255,255,255,0.08);
+  }
+
+  .f-brand {
+    font-family: var(--serif);
+    font-size: 20px;
+    color: rgba(255,255,255,0.85);
+    margin-bottom: 5px;
+  }
+
+  .f-tag {
+    font-family: var(--sans);
     font-size: 9px;
-    letter-spacing: 2px;
-    color: var(--text-3);
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.25);
+  }
+
+  .f-disc {
+    font-family: var(--sans);
+    font-size: 10px;
+    font-weight: 300;
+    line-height: 1.8;
+    color: rgba(255,255,255,0.2);
     text-align: right;
-    white-space: nowrap;
   }
 
-  /* ─── ANIMATIONS ─── */
+  /* ── ANIM ── */
   @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(12px); }
+    from { opacity: 0; transform: translateY(14px); }
     to   { opacity: 1; transform: translateY(0); }
   }
 
-  .fade-up {
-    animation: fadeUp 0.6s ease both;
-  }
+  .fa { opacity: 0; animation: fadeUp 0.55s ease forwards; }
+  .fa-1 { animation-delay: 0.04s; }
+  .fa-2 { animation-delay: 0.11s; }
+  .fa-3 { animation-delay: 0.18s; }
+  .fa-4 { animation-delay: 0.25s; }
 
-  .fade-up:nth-child(1) { animation-delay: 0.0s; }
-  .fade-up:nth-child(2) { animation-delay: 0.08s; }
-  .fade-up:nth-child(3) { animation-delay: 0.16s; }
-  .fade-up:nth-child(4) { animation-delay: 0.24s; }
-
-  /* ─── RESPONSIVE ─── */
-  @media (max-width: 900px) {
-    .metrics-grid { grid-template-columns: repeat(2, 1fr); }
+  /* ── RESPONSIVE ── */
+  @media (max-width: 960px) {
+    .hero { grid-template-columns: 1fr; padding: 36px 24px 32px; gap: 32px; }
+    .hero-aside { border-left: none; padding-left: 0; border-top: 1px solid var(--rule); padding-top: 24px; flex-direction: row; flex-wrap: wrap; gap: 24px; }
+    .aside-rule { display: none; }
+    .report-body { padding: 0 24px 60px; }
+    .metrics-row { grid-template-columns: 1fr 1fr; }
     .callouts-grid { grid-template-columns: 1fr; }
     .two-col { grid-template-columns: 1fr; }
-    .sector-row { grid-template-columns: 120px 1fr 60px 60px; }
-    .sector-row > span:nth-child(5),
-    .sector-row > .sector-num:nth-child(5) { display: none; }
-    .site-nav a:not(.nav-cta) { display: none; }
-  }
-
-  @media (max-width: 600px) {
-    .report-body { padding: 0 16px 60px; }
-    .report-hero { padding: 24px 16px 20px; }
-    .site-header { padding: 0 16px; }
-    .metrics-grid { grid-template-columns: 1fr 1fr; }
+    .site-header { padding: 0 24px; }
+    .site-footer { padding: 24px; grid-template-columns: 1fr; }
+    .f-disc { text-align: left; }
+    nav a:not(.cta-btn) { display: none; }
   }
 </style>
 </head>
 <body>
 
-<!-- ── SITE HEADER ── -->
+<!-- HEADER -->
 <header class="site-header">
-  <a href="https://dig-intelligence.vercel.app" class="site-logo">
-    <div class="logo-mark"><span>D</span></div>
-    <span class="logo-text">DIG Intelligence</span>
+  <a href="https://www.digappraisals.com" class="logo-wrap">
+    <span class="logo-name">Dig Appraisals</span>
+    <span class="logo-sub">Music &amp; Film Memorabilia</span>
   </a>
-  <nav class="site-nav">
-    <a href="https://dig-intelligence.vercel.app">Overview</a>
-    <a href="https://dig-intelligence.vercel.app">Guitars</a>
-    <a href="https://dig-intelligence.vercel.app">Beatles</a>
-    <a href="https://dig-intelligence.vercel.app">Bowie</a>
-    <a href="#" class="active" style="color:var(--text-1)">Irsay</a>
-    <a href="https://dig-intelligence.vercel.app" class="nav-cta">Dig Appraisal</a>
+  <nav>
+    <a href="https://www.digappraisals.com/services">Services</a>
+    <a href="https://www.digappraisals.com/estate-appraisals">Estates</a>
+    <a href="https://www.digappraisals.com/cases">Case Studies</a>
+    <a href="https://www.digappraisals.com/memorabilia-iq">Memorabilia IQ</a>
+    <a href="#" class="active">Irsay Report</a>
+    <a href="https://www.digappraisals.com/contact" class="cta-btn">Contact</a>
   </nav>
 </header>
 
-<!-- ── REPORT HERO ── -->
-<div class="report-hero">
-  <div class="report-meta">
-    <span class="report-tag">DIG Intelligence · Collector Portfolio Research</span>
-    <div class="meta-sep"></div>
-    <span class="report-date">March 2026</span>
-    <div class="meta-sep"></div>
-    <span class="report-date">35 Lots · 24-Year Window</span>
+<!-- HERO -->
+<div class="hero">
+  <div>
+    <div class="hero-eyebrow">Collector Portfolio Research</div>
+    <h1 class="hero-title">The Irsay Collection<br><em>Return Attribution &amp; Market Analysis</em></h1>
+    <p class="hero-deck">A specialist appraisal of the Jim Irsay auction portfolio — tracking cost basis against 2026 estimated values across 35 lots of guitars, instruments, lyrics, manuscripts, and personal artefacts acquired over a 24-year window.</p>
+    <div class="hero-chips">
+      <span class="chip chip-green">Overweight · Guitar-Grade Memorabilia</span>
+      <span class="chip chip-plain">Rock &amp; Jazz Provenance</span>
+      <span class="chip chip-plain">35 Lots · 2002–2023</span>
+      <span class="chip chip-plain">March 2026</span>
+    </div>
   </div>
-  <h1 class="report-title">The Irsay Collection — Return Attribution &amp; Market Analysis</h1>
-  <p class="report-deck">A Goldman-style appraisal of the Jim Irsay auction portfolio, tracking cost basis against 2026 realised values across guitars, instruments, lyrics, manuscripts, and personal artefacts.</p>
-  <div class="report-chips">
-    <span class="chip chip-buy">Overweight · Guitar-Grade Memorabilia</span>
-    <span class="chip chip-sector">Music Instruments</span>
-    <span class="chip chip-sector">Rock &amp; Jazz Provenance</span>
-    <span class="chip chip-sector">12-Month Outlook: Constructive</span>
+  <div class="hero-aside">
+    <div>
+      <div class="aside-label">2026 Estimated Value</div>
+      <div class="aside-value">$68.0M</div>
+      <div class="aside-hint up">↑ From $25.0M cost basis</div>
+    </div>
+    <div class="aside-rule"></div>
+    <div>
+      <div class="aside-label">Total Return</div>
+      <div class="aside-value">+172%</div>
+      <div class="aside-hint up">+$43.0M unrealised gain</div>
+    </div>
+    <div class="aside-rule"></div>
+    <div>
+      <div class="aside-label">Portfolio CAGR</div>
+      <div class="aside-value">11.9%</div>
+      <div class="aside-hint">Avg hold period: 9.1 years</div>
+    </div>
   </div>
 </div>
 
-<!-- ── REPORT BODY ── -->
+<!-- BODY -->
 <div class="report-body">
 
-  <!-- SUMMARY METRICS -->
+  <!-- SUMMARY -->
   <div class="section">
-    <div class="section-label">Portfolio Summary</div>
-    <div class="metrics-grid">
-      <div class="metric-card fade-up">
-        <div class="metric-label">Current Value</div>
-        <div class="metric-value">$68.0M</div>
-        <div class="metric-sub">↑ From $25.0M cost basis</div>
+    <div class="s-eye">Portfolio Summary</div>
+    <h2 class="s-head">At a Glance</h2>
+
+    <div class="metrics-row">
+      <div class="metric-cell fa fa-1">
+        <div class="m-label">Cost Basis</div>
+        <div class="m-val">$25.0M</div>
+        <div class="m-hint">35 lots · 2002–2023</div>
       </div>
-      <div class="metric-card fade-up">
-        <div class="metric-label">Total Return</div>
-        <div class="metric-value">+172%</div>
-        <div class="metric-sub">+$43.0M net gain</div>
+      <div class="metric-cell fa fa-2">
+        <div class="m-label">Net Gain</div>
+        <div class="m-val">$43.0M</div>
+        <div class="m-hint up">Unrealised appreciation</div>
       </div>
-      <div class="metric-card fade-up">
-        <div class="metric-label">Avg Hold Period</div>
-        <div class="metric-value">9.1 yrs</div>
-        <div class="metric-sub neutral">Avg entry year: ~2014</div>
+      <div class="metric-cell fa fa-3">
+        <div class="m-label">Top Sector</div>
+        <div class="m-val">Guitars</div>
+        <div class="m-hint">+205.7% total · 20 lots</div>
       </div>
-      <div class="metric-card fade-up">
-        <div class="metric-label">Portfolio CAGR</div>
-        <div class="metric-value">11.9%</div>
-        <div class="metric-sub">vs. S&P 500 ~12.8%</div>
+      <div class="metric-cell fa fa-4">
+        <div class="m-label">Peak Single CAGR</div>
+        <div class="m-val">67.1%</div>
+        <div class="m-hint">Van Halen Charvel · 3yr</div>
       </div>
     </div>
 
-    <!-- CALLOUT BOXES -->
+    <!-- CALLOUTS -->
     <div class="callouts-grid">
-
-      <div class="callout callout-alpha">
-        <div class="callout-type">Alpha Driver</div>
-        <div class="callout-headline">Jazz instruments punched well above their weight</div>
-        <div class="callout-body">Miles Davis and John Coltrane pieces held for just 4 years produced CAGRs of 50% and 36% respectively — outperforming even the trophy guitar lots on a risk-adjusted basis. Short post-2020 windows dramatically outperform the long-dated pre-2015 book.</div>
-        <div class="callout-stat">
-          <span class="callout-stat-num">+50.1%</span>
-          <span class="callout-stat-desc">Davis trumpet CAGR · 4yr hold</span>
+      <div class="callout callout-a">
+        <div class="c-tag">Alpha Driver</div>
+        <div class="c-head">Jazz instruments punched far above their weight</div>
+        <div class="c-body">Miles Davis and John Coltrane pieces held for just 4 years produced CAGRs of 50% and 36% respectively — outperforming even the trophy guitar lots on a risk-adjusted basis. Short post-2020 windows dramatically outperform the long-dated pre-2015 book.</div>
+        <div class="c-stat">
+          <span class="c-num">+50.1%</span>
+          <span class="c-desc">Davis trumpet CAGR · 4yr hold</span>
         </div>
       </div>
-
-      <div class="callout callout-signal">
-        <div class="callout-type">Investment Signal</div>
-        <div class="callout-headline">Performative provenance is the pricing variable that matters</div>
-        <div class="callout-body">Every lot in the top-quartile CAGR tier shares one attribute: the instrument was physically used at a culturally defining moment. Lots without this "touch" story — film scripts, personal jewellery, awards — underperform structurally regardless of artist fame.</div>
-        <div class="callout-stat">
-          <span class="callout-stat-num">+20.2%</span>
-          <span class="callout-stat-desc">Avg CAGR, played instruments</span>
+      <div class="callout callout-s">
+        <div class="c-tag">Investment Signal</div>
+        <div class="c-head">Performative provenance is the singular pricing variable</div>
+        <div class="c-body">Every top-quartile CAGR lot was physically used at a culturally defining moment. Lots without a "touch" story — film scripts, personal jewellery, awards — underperform structurally, regardless of artist fame or cultural profile.</div>
+        <div class="c-stat">
+          <span class="c-num">+20.2%</span>
+          <span class="c-desc">Avg CAGR, played instruments</span>
         </div>
       </div>
-
-      <div class="callout callout-risk">
-        <div class="callout-type">Concentration Risk</div>
-        <div class="callout-headline">76.8% of value sits in a single sub-category</div>
-        <div class="callout-body">Guitars represent $52.2M of the $68M current value. While the category has delivered +205% total return, the illiquidity profile and insurance cost of this concentration is material. Instruments and lyrics diversify the return base but remain underweight by allocation.</div>
-        <div class="callout-stat">
-          <span class="callout-stat-num">76.8%</span>
-          <span class="callout-stat-desc">Guitar weight by current value</span>
+      <div class="callout callout-r">
+        <div class="c-tag">Concentration Risk</div>
+        <div class="c-head">76.8% of portfolio value sits in a single sub-category</div>
+        <div class="c-body">Guitars represent $52.2M of the $68M estimated value. While the category has delivered +205% total return, the illiquidity profile and insurance cost of this concentration is material. Instruments and lyrics diversify the return base but remain underweight.</div>
+        <div class="c-stat">
+          <span class="c-num">76.8%</span>
+          <span class="c-desc">Guitar weight by current value</span>
         </div>
       </div>
-
     </div>
 
     <!-- PULLQUOTE -->
     <blockquote class="pullquote">
-      The Irsay collection demonstrates the asymmetric return profile of museum-grade provenance at scale. Instruments tied to defining cultural moments — Gilmour's Black Strat, Garcia's Tiger — command scarcity premiums that compress correlation with public equities to near zero, making them a structurally distinct asset class.
-      <cite>DIG Intelligence Research · March 2026</cite>
+      <p>The Irsay collection demonstrates the asymmetric return profile of museum-grade provenance at scale. Instruments tied to defining cultural moments — Gilmour's Black Strat, Garcia's Tiger — command scarcity premiums that compress correlation with public equities to near zero, making them a structurally distinct asset class.</p>
+      <cite>Dig Appraisals Research · March 2026</cite>
     </blockquote>
   </div>
 
   <!-- SECTOR + ALLOCATION -->
   <div class="section">
-    <div class="two-col">
+    <div class="s-eye">Performance Attribution</div>
+    <h2 class="s-head">Sector Breakdown</h2>
 
+    <div class="two-col">
       <!-- SECTOR TABLE -->
       <div>
-        <div class="section-label">Sector Performance</div>
-        <div class="sector-row header">
-          <span>Sector</span>
-          <span></span>
-          <span style="text-align:right">CAGR</span>
-          <span style="text-align:right">Return</span>
-          <span style="text-align:right">Rating</span>
-        </div>
-        <div class="sector-row">
-          <div class="sector-name">Instruments</div>
-          <div class="sector-bar-track"><div class="sector-bar-fill" style="width:100%"></div></div>
-          <div class="sector-num pos">+20.2%</div>
-          <div class="sector-num pos">+103%</div>
-          <div class="sector-num"><span class="badge badge-buy">Buy</span></div>
-        </div>
-        <div class="sector-row">
-          <div class="sector-name">Guitars</div>
-          <div class="sector-bar-track"><div class="sector-bar-fill" style="width:79%"></div></div>
-          <div class="sector-num pos">+15.9%</div>
-          <div class="sector-num pos">+206%</div>
-          <div class="sector-num"><span class="badge badge-buy">Buy</span></div>
-        </div>
-        <div class="sector-row">
-          <div class="sector-name">Costumes</div>
-          <div class="sector-bar-track"><div class="sector-bar-fill" style="width:55%"></div></div>
-          <div class="sector-num pos">+11.0%</div>
-          <div class="sector-num pos">+248%</div>
-          <div class="sector-num"><span class="badge badge-hold">Hold</span></div>
-        </div>
-        <div class="sector-row">
-          <div class="sector-name">Autographs</div>
-          <div class="sector-bar-track"><div class="sector-bar-fill" style="width:37%"></div></div>
-          <div class="sector-num pos">+7.4%</div>
-          <div class="sector-num pos">+239%</div>
-          <div class="sector-num"><span class="badge badge-hold">Hold</span></div>
-        </div>
-        <div class="sector-row">
-          <div class="sector-name">Awards</div>
-          <div class="sector-bar-track"><div class="sector-bar-fill" style="width:40%"></div></div>
-          <div class="sector-num pos">+7.9%</div>
-          <div class="sector-num pos">+131%</div>
-          <div class="sector-num"><span class="badge badge-hold">Hold</span></div>
-        </div>
-        <div class="sector-row">
-          <div class="sector-name">Lyrics</div>
-          <div class="sector-bar-track"><div class="sector-bar-fill" style="width:49%"></div></div>
-          <div class="sector-num pos">+9.8%</div>
-          <div class="sector-num pos">+109%</div>
-          <div class="sector-num"><span class="badge badge-hold">Hold</span></div>
-        </div>
-        <div class="sector-row">
-          <div class="sector-name">Film MSS</div>
-          <div class="sector-bar-track"><div class="sector-bar-fill dim" style="width:15%"></div></div>
-          <div class="sector-num neutral">+3.0%</div>
-          <div class="sector-num neutral">+16%</div>
-          <div class="sector-num neutral">—</div>
-        </div>
-        <div class="sector-row" style="border:none">
-          <div class="sector-name">Personal Items</div>
-          <div class="sector-bar-track"><div class="sector-bar-fill dim" style="width:6%"></div></div>
-          <div class="sector-num neutral">+1.2%</div>
-          <div class="sector-num neutral">+14%</div>
-          <div class="sector-num neutral">—</div>
-        </div>
+        <table class="sector-tbl">
+          <thead>
+            <tr>
+              <th>Sector</th>
+              <th></th>
+              <th class="r">CAGR</th>
+              <th class="r">Return</th>
+              <th class="r">Rating</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="sn">Instruments</td>
+              <td><div class="bar-t"><div class="bar-f" style="width:100%"></div></div></td>
+              <td class="nc up">+20.2%</td>
+              <td class="nc up">+103%</td>
+              <td style="text-align:right;padding-left:8px"><span class="badge b-buy">Buy</span></td>
+            </tr>
+            <tr>
+              <td class="sn">Guitars</td>
+              <td><div class="bar-t"><div class="bar-f" style="width:79%"></div></div></td>
+              <td class="nc up">+15.9%</td>
+              <td class="nc up">+206%</td>
+              <td style="text-align:right;padding-left:8px"><span class="badge b-buy">Buy</span></td>
+            </tr>
+            <tr>
+              <td class="sn">Costumes</td>
+              <td><div class="bar-t"><div class="bar-f" style="width:55%"></div></div></td>
+              <td class="nc up">+11.0%</td>
+              <td class="nc up">+248%</td>
+              <td style="text-align:right;padding-left:8px"><span class="badge b-hold">Hold</span></td>
+            </tr>
+            <tr>
+              <td class="sn">Lyrics</td>
+              <td><div class="bar-t"><div class="bar-f" style="width:49%"></div></div></td>
+              <td class="nc up">+9.8%</td>
+              <td class="nc up">+109%</td>
+              <td style="text-align:right;padding-left:8px"><span class="badge b-hold">Hold</span></td>
+            </tr>
+            <tr>
+              <td class="sn">Awards</td>
+              <td><div class="bar-t"><div class="bar-f" style="width:40%"></div></div></td>
+              <td class="nc up">+7.9%</td>
+              <td class="nc up">+131%</td>
+              <td style="text-align:right;padding-left:8px"><span class="badge b-hold">Hold</span></td>
+            </tr>
+            <tr>
+              <td class="sn">Autographs</td>
+              <td><div class="bar-t"><div class="bar-f" style="width:37%"></div></div></td>
+              <td class="nc up">+7.4%</td>
+              <td class="nc up">+239%</td>
+              <td style="text-align:right;padding-left:8px"><span class="badge b-hold">Hold</span></td>
+            </tr>
+            <tr>
+              <td class="sn">Film Manuscripts</td>
+              <td><div class="bar-t"><div class="bar-f dim" style="width:15%"></div></div></td>
+              <td class="nc dim">+3.0%</td>
+              <td class="nc dim">+16%</td>
+              <td style="text-align:right;padding-left:8px"><span class="badge b-hold" style="opacity:.45">—</span></td>
+            </tr>
+            <tr>
+              <td class="sn">Personal Items</td>
+              <td><div class="bar-t"><div class="bar-f dim" style="width:6%"></div></div></td>
+              <td class="nc dim">+1.2%</td>
+              <td class="nc dim">+14%</td>
+              <td style="text-align:right;padding-left:8px"><span class="badge b-hold" style="opacity:.45">—</span></td>
+            </tr>
+          </tbody>
+        </table>
       </div>
 
-      <!-- DONUT + LEGEND -->
-      <div class="chart-outer">
-        <div class="section-label">Value Concentration</div>
-        <div class="donut-wrap">
-          <canvas id="donutChart"></canvas>
-        </div>
+      <!-- CHARTS -->
+      <div>
+        <div class="panel-label">Value Concentration by Sector</div>
+        <div class="donut-wrap"><canvas id="donutChart"></canvas></div>
         <div class="donut-legend">
-          <div class="legend-item"><div class="legend-dot" style="background:#C9A84C"></div>Guitars 76.8%</div>
-          <div class="legend-item"><div class="legend-dot" style="background:#2E5A8E"></div>Instruments 15.7%</div>
-          <div class="legend-item"><div class="legend-dot" style="background:#2E7D52"></div>Lyrics 5.6%</div>
-          <div class="legend-item"><div class="legend-dot" style="background:#3E3D38"></div>Other 1.9%</div>
+          <div class="leg-row"><div class="leg-sw" style="background:#8C6D2F"></div>Guitars 76.8%</div>
+          <div class="leg-row"><div class="leg-sw" style="background:#2E5A8E"></div>Instruments 15.7%</div>
+          <div class="leg-row"><div class="leg-sw" style="background:#2D6645"></div>Lyrics 5.6%</div>
+          <div class="leg-row"><div class="leg-sw" style="background:#B8B4AC"></div>Other 1.9%</div>
         </div>
 
-        <div style="margin-top:24px;padding-top:24px;border-top:1px solid var(--border);">
-          <div class="section-label" style="margin-bottom:12px;">Holding Period Mix</div>
-          <div class="chart-container" style="height:130px;">
-            <canvas id="holdChart"></canvas>
-          </div>
+        <div class="hold-block">
+          <div class="panel-label">Avg CAGR by Holding Period</div>
+          <div class="hold-canvas"><canvas id="holdChart"></canvas></div>
         </div>
       </div>
-
     </div>
   </div>
 
-  <!-- CAGR SCATTER -->
+  <!-- LOT TABLE -->
   <div class="section">
-    <div class="section-label">Risk / Return Map — CAGR vs Hold Period (All 35 Lots)</div>
-    <div class="chart-container" style="height:300px;">
-      <canvas id="scatterChart"></canvas>
-    </div>
-  </div>
-
-  <!-- PERFORMANCE TABLE -->
-  <div class="section">
-    <div class="section-label">Lot-Level Performance — Top &amp; Bottom Performers</div>
-    <table class="perf-table">
+    <div class="s-eye">Lot-Level Analysis</div>
+    <h2 class="s-head">Performance by Lot</h2>
+    <table class="perf-tbl">
       <thead>
         <tr>
           <th>Lot</th>
-          <th class="r">Acq.</th>
+          <th class="r">Acquired</th>
           <th class="r">Cost Basis</th>
           <th class="r">2026 Value</th>
           <th class="r">Total Return</th>
@@ -874,127 +849,121 @@
           <th class="r">Rating</th>
         </tr>
       </thead>
-      <tbody id="perfTableBody"></tbody>
+      <tbody id="perfBody"></tbody>
     </table>
   </div>
 
 </div>
 
-<!-- ── FOOTER ── -->
-<footer class="report-footer">
-  <div class="footer-disclaimer">
-    This report is produced by DIG Intelligence for illustrative and educational purposes only. All figures derived from publicly available auction records supplemented by DIG proprietary data. "Helen's Rating" reflects internal curation methodology. Past performance is not indicative of future results. Not investment advice. © 2026 Dig Appraisals.
+<!-- FOOTER -->
+<footer class="site-footer">
+  <div>
+    <div class="f-brand">Dig Appraisals</div>
+    <div class="f-tag">Appraisers of Iconic Music &amp; Film Memorabilia</div>
   </div>
-  <div class="footer-brand">DIG Intelligence<br>Market Analytics</div>
+  <div class="f-disc">
+    This report is produced for illustrative and educational purposes only.<br>
+    All figures derived from publicly available auction records supplemented by DIG proprietary data.<br>
+    Past performance is not indicative of future results. Not investment advice. © 2026 Dig Appraisals.
+  </div>
 </footer>
 
 <script>
-// ── DATA ──
 const lots = [
-  { desc: "David Gilmour Black Stratocaster",     sub: "Pink Floyd · primary instrument",   cat: "Guitars",     buy: 3975000,  sell: 14550000, yr: 2019 },
-  { desc: "Jerry Garcia Tiger Guitar",             sub: "Doug Irwin build · Dead",           cat: "Guitars",     buy: 957000,   sell: 11560000, yr: 2002 },
-  { desc: "Kurt Cobain Fender Mustang",            sub: "Smells Like Teen Spirit video",     cat: "Guitars",     buy: 4687500,  sell: 6907000,  yr: 2022 },
-  { desc: "Eric Clapton Martin 000-42",            sub: "MTV Unplugged acoustic",            cat: "Guitars",     buy: 791500,   sell: 4101000,  yr: 2004 },
-  { desc: "John Lennon Broadwood Piano",           sub: "Home composition instrument",       cat: "Instruments", buy: 575000,   sell: 3247000,  yr: 2019 },
-  { desc: "Eric Clapton The Fool Gibson SG",       sub: "Hand-painted, psychedelic era",     cat: "Guitars",     buy: 1270000,  sell: 3003000,  yr: 2023 },
-  { desc: "Beatles Ed Sullivan Drumhead",          sub: "Historic TV debut artefact",        cat: "Instruments", buy: 2050000,  sell: 2881000,  yr: 2015 },
-  { desc: "Bob Dylan – The Times handwritten lyrics", sub: "Original manuscript",            cat: "Lyrics",      buy: 750000,   sell: 2515000,  yr: 2020 },
-  { desc: "Ringo Starr Beatles Drumkit",           sub: "Original Ludwig kit",               cat: "Instruments", buy: 2110000,  sell: 2393000,  yr: 2015 },
-  { desc: "David Gilmour Martin D-35",             sub: "Acoustic, Gilmour collection",      cat: "Guitars",     buy: 1095000,  sell: 2393000,  yr: 2019 },
-  { desc: "George Harrison Gibson SG",             sub: "Revolver LP recording",             cat: "Guitars",     buy: 567500,   sell: 2271000,  yr: 2004 },
-  { desc: "Miles Davis Martin Committee Trumpet",  sub: "Custom commission",                 cat: "Instruments", buy: 325000,   sell: 1651000,  yr: 2022 },
-  { desc: "John Lennon Rickenbacker",              sub: "Given to Ringo Starr",              cat: "Guitars",     buy: 910000,   sell: 1270000,  yr: 2015 },
-  { desc: "John Lennon Gretsch",                   sub: "Paperback Writer recording",        cat: "Guitars",     buy: 593000,   sell: 1270000,  yr: 2014 },
-  { desc: "Paul McCartney Hey Jude Lyrics",        sub: "Original handwritten",              cat: "Lyrics",      buy: 910000,   sell: 1016000,  yr: 2020 },
-  { desc: "U2 The Edge Gibson Explorer",           sub: "Stage played",                      cat: "Guitars",     buy: 437500,   sell: 635000,   yr: 2021 },
-  { desc: "Prince Yellow Cloud Guitar",            sub: "Andy Beech build",                  cat: "Guitars",     buy: 137500,   sell: 635000,   yr: 2016 },
-  { desc: "John Lennon/Harrison Vox Kensington",   sub: "Joint provenance",                  cat: "Guitars",     buy: 418000,   sell: 609600,   yr: 2013 },
-  { desc: "George Harrison Harptone Guitar",       sub: "Post-Beatles",                      cat: "Guitars",     buy: 121870,   sell: 609600,   yr: 2005 },
-  { desc: "Eddie Van Halen Charvel Guitar",        sub: "Stage played & signed",             cat: "Guitars",     buy: 114300,   sell: 533400,   yr: 2023 },
-  { desc: "Sly Stallone Rocky Script Notebook",    sub: "Handwritten film manuscript",       cat: "Film MSS",    buy: 437500,   sell: 508000,   yr: 2021 },
-  { desc: "Bob Dylan Gibson Hummingbird",          sub: "Clinton Inauguration",              cat: "Guitars",     buy: 225000,   sell: 482600,   yr: 2023 },
-  { desc: "John Coltrane Prototype Saxophone",     sub: "Nippon prototype, unique",          cat: "Instruments", buy: 125000,   sell: 431800,   yr: 2022 },
-  { desc: "Janis Joplin Gibson J-45",              sub: "Personal guitar",                   cat: "Guitars",     buy: 200000,   sell: 381000,   yr: 2022 },
-  { desc: "Lou Reed Telecaster \"Goldie\"",        sub: "Fender, stage played",              cat: "Guitars",     buy: 72600,    sell: 330200,   yr: 2021 },
-  { desc: "Jim Morrison Handwritten Notebook",     sub: "Lyrics & poetry",                   cat: "Lyrics",      buy: 160000,   sell: 266700,   yr: 2016 },
-  { desc: "Neal Schon Les Paul",                   sub: "Don't Stop Believin'",              cat: "Guitars",     buy: 250000,   sell: 254000,   yr: 2021 },
-  { desc: "Don McLean Martin 00-21",               sub: "Used to record Vincent",            cat: "Guitars",     buy: 156250,   sell: 234950,   yr: 2021 },
-  { desc: "Beatles Sgt Pepper Promo Poster",       sub: "Signed, UK promo",                  cat: "Autographs",  buy: 52500,    sell: 177800,   yr: 2009 },
-  { desc: "John McVie Alembic Bass",               sub: "Rumours LP recording",              cat: "Guitars",     buy: 100000,   sell: 177800,   yr: 2022 },
-  { desc: "McCartney Affidavit w/ Lennon notes",   sub: "Beatles dissolution document",      cat: "Music MSS",   buy: 125000,   sell: 165100,   yr: 2018 },
-  { desc: "Ringo Starr RIAA Award",                sub: "I Want To Hold Your Hand",          cat: "Awards",      buy: 68750,    sell: 158750,   yr: 2015 },
-  { desc: "James Brown Godfather Cape",            sub: "Stage-worn costume",                cat: "Costumes",    buy: 43750,    sell: 152400,   yr: 2014 },
-  { desc: "Ringo Starr Pinky Ring",                sub: "Personal item",                     cat: "Personal",    buy: 106250,   sell: 120650,   yr: 2015 },
-  { desc: "Ringo Starr Second Ludwig Drum",        sub: "Beatles second kit",                cat: "Instruments", buy: 75000,    sell: 95250,    yr: 2015 }
+  { desc:"David Gilmour Black Stratocaster",     sub:"Pink Floyd · primary instrument",       cat:"Guitars",     buy:3975000, sell:14550000, yr:2019 },
+  { desc:"Jerry Garcia Tiger Guitar",             sub:"Doug Irwin build · Grateful Dead",      cat:"Guitars",     buy:957000,  sell:11560000, yr:2002 },
+  { desc:"Kurt Cobain Fender Mustang",            sub:"Smells Like Teen Spirit video",          cat:"Guitars",     buy:4687500, sell:6907000,  yr:2022 },
+  { desc:"Eric Clapton Martin 000-42",            sub:"MTV Unplugged acoustic",                 cat:"Guitars",     buy:791500,  sell:4101000,  yr:2004 },
+  { desc:"John Lennon Broadwood Piano",           sub:"Home composition instrument",            cat:"Instruments", buy:575000,  sell:3247000,  yr:2019 },
+  { desc:"Eric Clapton The Fool Gibson SG",       sub:"Hand-painted · psychedelic era",         cat:"Guitars",     buy:1270000, sell:3003000,  yr:2023 },
+  { desc:"Beatles Ed Sullivan Drumhead",          sub:"Historic TV debut artefact",             cat:"Instruments", buy:2050000, sell:2881000,  yr:2015 },
+  { desc:"Bob Dylan — The Times Lyrics",          sub:"Original handwritten manuscript",        cat:"Lyrics",      buy:750000,  sell:2515000,  yr:2020 },
+  { desc:"Ringo Starr Beatles Drumkit",           sub:"Original Ludwig kit",                    cat:"Instruments", buy:2110000, sell:2393000,  yr:2015 },
+  { desc:"David Gilmour Martin D-35",             sub:"Acoustic · Gilmour collection",          cat:"Guitars",     buy:1095000, sell:2393000,  yr:2019 },
+  { desc:"George Harrison Gibson SG",             sub:"Revolver LP recording",                  cat:"Guitars",     buy:567500,  sell:2271000,  yr:2004 },
+  { desc:"Miles Davis Martin Committee Trumpet",  sub:"Custom commission",                      cat:"Instruments", buy:325000,  sell:1651000,  yr:2022 },
+  { desc:"John Lennon Rickenbacker",              sub:"Given to Ringo Starr",                   cat:"Guitars",     buy:910000,  sell:1270000,  yr:2015 },
+  { desc:"John Lennon Gretsch",                   sub:"Paperback Writer recording",             cat:"Guitars",     buy:593000,  sell:1270000,  yr:2014 },
+  { desc:"Paul McCartney Hey Jude Lyrics",        sub:"Original handwritten",                   cat:"Lyrics",      buy:910000,  sell:1016000,  yr:2020 },
+  { desc:"U2 The Edge Gibson Explorer",           sub:"Stage played",                           cat:"Guitars",     buy:437500,  sell:635000,   yr:2021 },
+  { desc:"Prince Yellow Cloud Guitar",            sub:"Andy Beech build",                       cat:"Guitars",     buy:137500,  sell:635000,   yr:2016 },
+  { desc:"John Lennon / Harrison Vox Kensington", sub:"Joint provenance",                       cat:"Guitars",     buy:418000,  sell:609600,   yr:2013 },
+  { desc:"George Harrison Harptone Guitar",       sub:"Post-Beatles use",                       cat:"Guitars",     buy:121870,  sell:609600,   yr:2005 },
+  { desc:"Eddie Van Halen Charvel Guitar",        sub:"Stage played & signed",                  cat:"Guitars",     buy:114300,  sell:533400,   yr:2023 },
+  { desc:"Sly Stallone Rocky Script Notebook",    sub:"Handwritten film manuscript",            cat:"Film MSS",    buy:437500,  sell:508000,   yr:2021 },
+  { desc:"Bob Dylan Gibson Hummingbird",          sub:"Clinton Inauguration performance",       cat:"Guitars",     buy:225000,  sell:482600,   yr:2023 },
+  { desc:"John Coltrane Prototype Saxophone",     sub:"Nippon prototype · unique",              cat:"Instruments", buy:125000,  sell:431800,   yr:2022 },
+  { desc:"Janis Joplin Gibson J-45",              sub:"Personal guitar",                        cat:"Guitars",     buy:200000,  sell:381000,   yr:2022 },
+  { desc:"Lou Reed Telecaster 'Goldie'",          sub:"Fender · stage played",                  cat:"Guitars",     buy:72600,   sell:330200,   yr:2021 },
+  { desc:"Jim Morrison Handwritten Notebook",     sub:"Lyrics & poetry",                        cat:"Lyrics",      buy:160000,  sell:266700,   yr:2016 },
+  { desc:"Neal Schon Les Paul",                   sub:"Don't Stop Believin'",                   cat:"Guitars",     buy:250000,  sell:254000,   yr:2021 },
+  { desc:"Don McLean Martin 00-21",               sub:"Used to record Vincent",                 cat:"Guitars",     buy:156250,  sell:234950,   yr:2021 },
+  { desc:"Beatles Sgt Pepper Promo Poster",       sub:"Signed · UK promo",                      cat:"Autographs",  buy:52500,   sell:177800,   yr:2009 },
+  { desc:"John McVie Alembic Bass",               sub:"Rumours LP recording",                   cat:"Guitars",     buy:100000,  sell:177800,   yr:2022 },
+  { desc:"McCartney Affidavit w/ Lennon Notes",   sub:"Beatles dissolution document",           cat:"Music MSS",   buy:125000,  sell:165100,   yr:2018 },
+  { desc:"Ringo Starr RIAA Award",                sub:"I Want To Hold Your Hand",               cat:"Awards",      buy:68750,   sell:158750,   yr:2015 },
+  { desc:"James Brown Godfather Cape",            sub:"Stage-worn costume",                     cat:"Costumes",    buy:43750,   sell:152400,   yr:2014 },
+  { desc:"Ringo Starr Pinky Ring",                sub:"Personal item",                          cat:"Personal",    buy:106250,  sell:120650,   yr:2015 },
+  { desc:"Ringo Starr Second Ludwig Drum",        sub:"Beatles second kit",                     cat:"Instruments", buy:75000,   sell:95250,    yr:2015 }
 ];
 
 lots.forEach(l => {
-  const yrs = 2026 - l.yr;
-  l.years = yrs;
+  const y = 2026 - l.yr;
+  l.years = y;
   l.ret = (l.sell - l.buy) / l.buy * 100;
-  l.cagr = yrs > 0 ? (Math.pow(l.sell/l.buy, 1/yrs) - 1)*100 : 0;
+  l.cagr = y > 0 ? (Math.pow(l.sell / l.buy, 1 / y) - 1) * 100 : 0;
 });
 
-// Sort by CAGR desc
-const sorted = [...lots].sort((a,b) => b.cagr - a.cagr);
+const sorted = [...lots].sort((a, b) => b.cagr - a.cagr);
 
-// ── TABLE ──
 function fmt(n) {
-  if (n >= 1e6) return '$' + (n/1e6).toFixed(1) + 'M';
-  if (n >= 1e3) return '$' + (n/1e3).toFixed(0) + 'K';
-  return '$' + n.toFixed(0);
+  if (n >= 1e6) return '$' + (n / 1e6).toFixed(1) + 'M';
+  return '$' + Math.round(n / 1000) + 'K';
 }
 
-const tbody = document.getElementById('perfTableBody');
+const tbody = document.getElementById('perfBody');
 
-// Top 8 + bottom 3
-const display = [...sorted.slice(0,8)];
-// add separator row then bottom 3
-display.push(null); // separator
-sorted.slice(-3).forEach(l => display.push(l));
-
-display.forEach(lot => {
-  if (!lot) {
-    const tr = document.createElement('tr');
-    tr.innerHTML = `<td colspan="7" style="padding:4px 0;border-bottom:1px solid var(--border);">
-      <div style="font-family:var(--mono);font-size:9px;letter-spacing:2px;color:var(--text-3);text-align:center;text-transform:uppercase;">— Underperformers —</div>
-    </td>`;
-    tbody.appendChild(tr);
-    return;
-  }
-
-  const isTop = lot.cagr > 10;
-  const cagrPip = Math.min(60, Math.max(2, lot.cagr * 0.85));
+function addRow(l, isTop) {
+  const pip = Math.min(44, Math.max(2, l.cagr * 0.65));
   const tr = document.createElement('tr');
   tr.innerHTML = `
     <td>
-      <span class="lot-title">${lot.desc}</span>
-      <span class="lot-sub">${lot.sub}</span>
+      <span class="lot-n">${l.desc}</span>
+      <span class="lot-s">${l.sub}</span>
     </td>
-    <td class="td-mono">${lot.yr}</td>
-    <td class="td-mono">${fmt(lot.buy)}</td>
-    <td class="td-mono">${fmt(lot.sell)}</td>
-    <td class="td-mono ${lot.ret > 0 ? 'pos' : 'neg'}">+${lot.ret.toFixed(0)}%</td>
-    <td class="td-mono">
-      <div class="cagr-cell">
-        <div class="cagr-pip" style="width:${cagrPip}px;${!isTop?'background:var(--text-3)':''}"></div>
-        <span class="${isTop ? 'pos' : 'neutral'}">${lot.cagr > 0 ? '+' : ''}${lot.cagr.toFixed(1)}%</span>
+    <td class="tn">${l.yr}</td>
+    <td class="tn">${fmt(l.buy)}</td>
+    <td class="tn">${fmt(l.sell)}</td>
+    <td class="tn ${l.ret > 30 ? 'up' : ''}">+${Math.round(l.ret)}%</td>
+    <td class="tn">
+      <div class="cagr-wrap">
+        <div class="cagr-pip ${isTop ? '' : 'dim'}" style="width:${pip}px"></div>
+        <span style="color:${isTop ? 'var(--green)' : 'var(--ink-faint)'}">${l.cagr > 0 ? '+' : ''}${l.cagr.toFixed(1)}%</span>
       </div>
     </td>
-    <td class="td-mono"><span class="badge ${isTop ? 'badge-buy' : 'badge-hold'}">${isTop ? 'Buy' : 'Hold'}</span></td>
+    <td style="text-align:right"><span class="badge ${isTop ? 'b-buy' : 'b-hold'}">${isTop ? 'Buy' : 'Hold'}</span></td>
   `;
   tbody.appendChild(tr);
-});
+}
 
-// ── DONUT CHART ──
+sorted.slice(0, 10).forEach(l => addRow(l, true));
+
+const sep = document.createElement('tr');
+sep.className = 'sep-r';
+sep.innerHTML = `<td colspan="7"><div class="sep-r-label">Underperformers</div></td>`;
+tbody.appendChild(sep);
+
+sorted.slice(-4).forEach(l => addRow(l, false));
+
+// Donut
 new Chart(document.getElementById('donutChart'), {
   type: 'doughnut',
   data: {
     labels: ['Guitars', 'Instruments', 'Lyrics', 'Other'],
     datasets: [{
       data: [76.8, 15.7, 5.6, 1.9],
-      backgroundColor: ['#C9A84C', '#2E5A8E', '#2E7D52', '#3E3D38'],
-      borderColor: '#0A0F1A',
+      backgroundColor: ['#8C6D2F', '#2E5A8E', '#2D6645', '#B8B4AC'],
+      borderColor: '#FFFFFF',
       borderWidth: 3,
       hoverOffset: 4
     }]
@@ -1003,19 +972,21 @@ new Chart(document.getElementById('donutChart'), {
     responsive: true,
     maintainAspectRatio: false,
     cutout: '68%',
-    plugins: { legend: { display: false }, tooltip: { callbacks: { label: c => ` ${c.label}: ${c.parsed}%` } } }
+    plugins: {
+      legend: { display: false },
+      tooltip: { callbacks: { label: c => ` ${c.label}: ${c.parsed}%` } }
+    }
   }
 });
 
-// ── HOLD PERIOD CHART ──
+// Hold period
 new Chart(document.getElementById('holdChart'), {
   type: 'bar',
   data: {
-    labels: ['1–3 yrs', '4–7 yrs', '8–12 yrs', '13–20 yrs', '20+ yrs'],
+    labels: ['1–3 yr', '4–7 yr', '8–12 yr', '13–20 yr', '20+ yr'],
     datasets: [{
-      label: 'Avg CAGR',
       data: [35.2, 18.4, 9.1, 6.2, 4.8],
-      backgroundColor: '#C9A84C',
+      backgroundColor: '#8C6D2F',
       borderRadius: 2,
       borderSkipped: false
     }]
@@ -1023,75 +994,20 @@ new Chart(document.getElementById('holdChart'), {
   options: {
     responsive: true,
     maintainAspectRatio: false,
-    plugins: { legend: { display: false }, tooltip: { callbacks: { label: c => ` ${c.parsed.toFixed(1)}% avg CAGR` } } },
-    scales: {
-      x: { ticks: { color: '#7A7870', font: { family: "'DM Mono', monospace", size: 9 } }, grid: { color: 'rgba(255,255,255,0.04)' } },
-      y: { ticks: { color: '#7A7870', font: { family: "'DM Mono', monospace", size: 9 }, callback: v => v + '%' }, grid: { color: 'rgba(255,255,255,0.04)' }, border: { color: 'transparent' } }
-    }
-  }
-});
-
-// ── SCATTER CHART ──
-const scatterData = lots.map(l => ({
-  x: l.years,
-  y: parseFloat(l.cagr.toFixed(1)),
-  r: Math.max(5, Math.sqrt(l.sell / 100000) * 1.8),
-  label: l.desc.substring(0,28),
-  cat: l.cat
-}));
-
-const catColors = {
-  'Guitars': '#C9A84C',
-  'Instruments': '#4A8EC9',
-  'Lyrics': '#4CAF80',
-  'Film MSS': '#888',
-  'Music MSS': '#888',
-  'Autographs': '#C07040',
-  'Awards': '#888',
-  'Costumes': '#A0608C',
-  'Personal': '#555'
-};
-
-new Chart(document.getElementById('scatterChart'), {
-  type: 'bubble',
-  data: {
-    datasets: [{
-      data: scatterData,
-      backgroundColor: scatterData.map(d => catColors[d.cat] + '55'),
-      borderColor: scatterData.map(d => catColors[d.cat]),
-      borderWidth: 1,
-    }]
-  },
-  options: {
-    responsive: true,
-    maintainAspectRatio: false,
     plugins: {
       legend: { display: false },
-      tooltip: {
-        callbacks: {
-          label: ctx => {
-            const d = ctx.raw;
-            return [`${d.label}`, `Hold: ${d.x}y · CAGR: +${d.y}%`];
-          }
-        },
-        bodyFont: { family: "'DM Mono', monospace", size: 11 },
-        backgroundColor: '#0F1623',
-        borderColor: 'rgba(201,168,76,0.3)',
-        borderWidth: 1
-      }
+      tooltip: { callbacks: { label: c => ` ${c.parsed.toFixed(1)}% avg CAGR` } }
     },
     scales: {
       x: {
-        title: { display: true, text: 'Hold period (years)', color: '#7A7870', font: { family: "'DM Mono', monospace", size: 9 } },
-        ticks: { color: '#7A7870', font: { family: "'DM Mono', monospace", size: 9 } },
-        grid: { color: 'rgba(255,255,255,0.04)' },
-        min: 0, max: 26
+        ticks: { color: '#B8B4AC', font: { family: "'Jost', sans-serif", size: 9 } },
+        grid: { color: '#EEEBE6' },
+        border: { color: '#E2DED8' }
       },
       y: {
-        title: { display: true, text: 'CAGR (%)', color: '#7A7870', font: { family: "'DM Mono', monospace", size: 9 } },
-        ticks: { color: '#7A7870', font: { family: "'DM Mono', monospace", size: 9 }, callback: v => '+' + v + '%' },
-        grid: { color: 'rgba(255,255,255,0.04)' },
-        min: -5, max: 80
+        ticks: { color: '#B8B4AC', font: { family: "'Jost', sans-serif", size: 9 }, callback: v => v + '%' },
+        grid: { color: '#EEEBE6' },
+        border: { color: 'transparent' }
       }
     }
   }
