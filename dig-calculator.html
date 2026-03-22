@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DIG Score Calculator — Internal Tool</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --cream: #FAF8F4;
+    --white: #FFFFFF;
+    --ink: #1A1814;
+    --ink-mid: #3D3A34;
+    --ink-light: #7A7670;
+    --ink-faint: #B8B4AC;
+    --rule: #E2DED8;
+    --rule-light: #EEEBE6;
+    --gold: #8C6D2F;
+    --gold-mid: #B08D3A;
+    --gold-bg: #F7F1E4;
+    --gold-dark: #6A5020;
+    --green: #2D6645;
+    --green-bg: #EBF4EF;
+    --red: #8C2D2D;
+    --red-bg: #F7EBEB;
+    --amber: #8C6020;
+    --amber-bg: #F7F0E4;
+    --serif: 'Playfair Display', Georgia, serif;
+    --sans: 'Jost', 'Helvetica Neue', sans-serif;
+  }
+
+  html { scroll-behavior: smooth; }
+  body { background: var(--cream); color: var(--ink); font-family: var(--sans); font-size: 15px; line-height: 1.65; }
+
+  /* HEADER */
+  .site-header {
+    background: var(--ink);
+    padding: 0 48px;
+    display: flex; align-items: center; justify-content: space-between;
+    height: 56px; position: sticky; top: 0; z-index: 100;
+  }
+  .logo-wrap { text-decoration: none; display: flex; align-items: center; gap: 14px; }
+  .logo-name { font-family: var(--serif); font-size: 18px; font-weight: 400; color: rgba(255,255,255,0.9); }
+  .internal-badge {
+    font-family: var(--sans); font-size: 8px; font-weight: 500;
+    letter-spacing: 2px; text-transform: uppercase;
+    background: var(--gold); color: white;
+    padding: 3px 8px; border-radius: 1px;
+  }
+  .header-nav { display: flex; align-items: center; gap: 24px; }
+  .header-nav a {
+    font-family: var(--sans); font-size: 10px; letter-spacing: 1.5px;
+    text-transform: uppercase; color: rgba(255,255,255,0.4);
+    text-decoration: none; transition: color 0.2s;
+  }
+  .header-nav a:hover { color: rgba(255,255,255,0.8); }
+  .header-nav a.active { color: rgba(255,255,255,0.9); }
+
+  /* HERO STRIP */
+  .hero-strip {
+    background: var(--gold-bg);
+    border-bottom: 1px solid var(--rule);
+    padding: 32px 80px 28px;
+  }
+  .hero-eyebrow {
+    font-family: var(--sans); font-size: 9px; font-weight: 500;
+    letter-spacing: 3px; text-transform: uppercase;
+    color: var(--gold-mid); margin-bottom: 10px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .hero-eyebrow::before { content: ''; width: 24px; height: 1px; background: var(--gold-mid); display: inline-block; }
+  .hero-title { font-family: var(--serif); font-size: 32px; font-weight: 400; color: var(--ink); margin-bottom: 8px; }
+  .hero-deck { font-family: var(--sans); font-size: 13px; font-weight: 300; color: var(--ink-light); max-width: 600px; line-height: 1.8; }
+
+  /* LAYOUT */
+  .page-body { max-width: 1120px; margin: 0 auto; padding: 0 48px 80px; display: grid; grid-template-columns: 1fr 380px; gap: 56px; align-items: start; }
+
+  /* CALCULATOR */
+  .calc-panel { padding-top: 40px; }
+  .item-inputs { margin-bottom: 36px; }
+  .input-row { margin-bottom: 16px; }
+  .input-label {
+    font-family: var(--sans); font-size: 9px; font-weight: 400;
+    letter-spacing: 2.5px; text-transform: uppercase; color: var(--ink-faint);
+    margin-bottom: 6px; display: block;
+  }
+  .text-input {
+    width: 100%; border: 1px solid var(--rule); background: var(--white);
+    padding: 10px 14px; font-family: var(--sans); font-size: 14px;
+    font-weight: 300; color: var(--ink); outline: none;
+    transition: border-color 0.2s;
+  }
+  .text-input:focus { border-color: var(--gold-mid); }
+  .input-row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+
+  /* FACTOR BLOCKS */
+  .factor-block {
+    background: var(--white); border: 1px solid var(--rule);
+    margin-bottom: 12px; overflow: hidden;
+  }
+  .factor-header {
+    padding: 14px 20px 12px;
+    display: flex; align-items: center; justify-content: space-between;
+    border-bottom: 1px solid var(--rule-light);
+  }
+  .factor-left { display: flex; align-items: center; gap: 12px; }
+  .factor-icon {
+    width: 28px; height: 28px; border-radius: 2px;
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--sans); font-size: 10px; font-weight: 500;
+    letter-spacing: 1px; flex-shrink: 0;
+  }
+  .fi-p { background: var(--gold-bg); color: var(--gold); }
+  .fi-a { background: #EBF0F7; color: #2E5A8E; }
+  .fi-o { background: var(--green-bg); color: var(--green); }
+  .fi-h { background: #F3EBF7; color: #6A3A8E; }
+  .factor-name { font-family: var(--sans); font-size: 13px; font-weight: 500; color: var(--ink); }
+  .factor-weight {
+    font-family: var(--sans); font-size: 9px; font-weight: 400;
+    letter-spacing: 2px; text-transform: uppercase; color: var(--ink-faint);
+  }
+  .factor-score {
+    font-family: var(--serif); font-size: 22px; color: var(--ink);
+    min-width: 48px; text-align: right;
+  }
+  .factor-body { padding: 12px 20px 16px; }
+  .factor-desc { font-family: var(--sans); font-size: 11px; font-weight: 300; color: var(--ink-light); line-height: 1.7; margin-bottom: 12px; }
+
+  /* RADIO OPTIONS */
+  .option-list { display: flex; flex-direction: column; gap: 6px; }
+  .option-item {
+    display: flex; align-items: flex-start; gap: 10px;
+    padding: 9px 12px; border: 1px solid var(--rule);
+    cursor: pointer; transition: all 0.15s; background: var(--cream);
+  }
+  .option-item:hover { border-color: var(--gold-mid); background: var(--gold-bg); }
+  .option-item.selected { border-color: var(--gold-mid); background: var(--gold-bg); }
+  .option-item input[type=radio] { display: none; }
+  .option-dot {
+    width: 14px; height: 14px; border-radius: 50%;
+    border: 1.5px solid var(--rule); flex-shrink: 0; margin-top: 2px;
+    transition: all 0.15s;
+  }
+  .option-item.selected .option-dot { border-color: var(--gold-mid); background: var(--gold-mid); }
+  .option-value {
+    font-family: var(--sans); font-size: 10px; font-weight: 500;
+    letter-spacing: 1px; color: var(--gold);
+    min-width: 20px; margin-top: 2px; flex-shrink: 0;
+  }
+  .option-text { font-family: var(--sans); font-size: 12px; font-weight: 400; color: var(--ink); line-height: 1.5; }
+  .option-sub { display: block; font-weight: 300; color: var(--ink-faint); font-size: 11px; margin-top: 1px; }
+
+  /* HELEN SLIDER */
+  .helen-slider-wrap { display: flex; align-items: center; gap: 16px; margin-top: 4px; }
+  input[type=range] {
+    flex: 1; height: 2px; appearance: none; background: var(--rule);
+    outline: none; cursor: pointer;
+  }
+  input[type=range]::-webkit-slider-thumb {
+    appearance: none; width: 16px; height: 16px;
+    border-radius: 50%; background: var(--gold-mid);
+    border: 2px solid white; box-shadow: 0 0 0 1px var(--gold-mid);
+  }
+  .helen-val { font-family: var(--serif); font-size: 22px; color: var(--ink); min-width: 40px; text-align: center; }
+  .helen-scale { display: flex; justify-content: space-between; margin-top: 6px; }
+  .helen-scale span { font-family: var(--sans); font-size: 9px; color: var(--ink-faint); }
+
+  /* CALCULATE BUTTON */
+  .calc-btn {
+    width: 100%; margin-top: 24px; padding: 14px 24px;
+    background: var(--ink); color: white; border: none;
+    font-family: var(--sans); font-size: 11px; font-weight: 500;
+    letter-spacing: 2px; text-transform: uppercase;
+    cursor: pointer; transition: background 0.2s;
+  }
+  .calc-btn:hover { background: var(--gold); }
+
+  /* SIDEBAR */
+  .sidebar { padding-top: 40px; }
+
+  /* SCORE DISPLAY */
+  .score-card {
+    background: var(--ink); color: white;
+    padding: 28px 28px 24px; margin-bottom: 16px;
+    position: sticky; top: 72px;
+  }
+  .score-label {
+    font-family: var(--sans); font-size: 9px; font-weight: 400;
+    letter-spacing: 3px; text-transform: uppercase;
+    color: rgba(255,255,255,0.35); margin-bottom: 8px;
+  }
+  .score-number {
+    font-family: var(--serif); font-size: 72px; font-weight: 400;
+    line-height: 1; color: white; margin-bottom: 4px;
+    transition: all 0.3s ease;
+  }
+  .score-tier {
+    font-family: var(--sans); font-size: 10px; font-weight: 500;
+    letter-spacing: 2px; text-transform: uppercase;
+    margin-bottom: 24px;
+  }
+  .score-rule { height: 1px; background: rgba(255,255,255,0.1); margin-bottom: 20px; }
+
+  /* BREAKDOWN BARS */
+  .breakdown-row { margin-bottom: 14px; }
+  .breakdown-head { display: flex; justify-content: space-between; margin-bottom: 5px; }
+  .breakdown-name { font-family: var(--sans); font-size: 10px; font-weight: 400; letter-spacing: 1px; color: rgba(255,255,255,0.5); text-transform: uppercase; }
+  .breakdown-pts { font-family: var(--sans); font-size: 10px; font-weight: 400; color: rgba(255,255,255,0.6); }
+  .breakdown-track { height: 2px; background: rgba(255,255,255,0.08); border-radius: 1px; }
+  .breakdown-fill { height: 2px; border-radius: 1px; transition: width 0.4s ease; }
+  .fill-p { background: var(--gold-mid); }
+  .fill-a { background: #5A8EC9; }
+  .fill-o { background: #4D9E75; }
+  .fill-h { background: #9A5EC9; }
+
+  /* RANKING */
+  .rank-panel {
+    background: var(--white); border: 1px solid var(--rule);
+    padding: 20px 20px 16px; margin-top: 12px;
+  }
+  .rank-label {
+    font-family: var(--sans); font-size: 9px; font-weight: 400;
+    letter-spacing: 2.5px; text-transform: uppercase;
+    color: var(--ink-faint); margin-bottom: 16px;
+  }
+  .rank-row {
+    display: flex; align-items: center; gap: 10px;
+    padding: 7px 0; border-bottom: 1px solid var(--rule-light);
+    font-size: 12px;
+  }
+  .rank-row:last-child { border-bottom: none; }
+  .rank-pos { font-family: var(--sans); font-size: 10px; color: var(--ink-faint); min-width: 22px; }
+  .rank-name { font-family: var(--sans); font-size: 11px; color: var(--ink); flex: 1; }
+  .rank-score { font-family: var(--serif); font-size: 16px; color: var(--ink); }
+  .rank-row.highlight { background: var(--gold-bg); margin: 0 -20px; padding: 7px 20px; border-bottom: 1px solid rgba(176,141,58,0.2); }
+  .rank-row.highlight .rank-name { font-weight: 500; color: var(--gold); }
+  .rank-row.highlight .rank-score { color: var(--gold); }
+  .rank-divider { height: 1px; background: var(--rule-light); margin: 4px 0; }
+
+  /* FORMULA PANEL */
+  .formula-panel {
+    background: var(--gold-bg); border: 1px solid rgba(176,141,58,0.25);
+    padding: 20px; margin-top: 16px;
+  }
+  .formula-title { font-family: var(--sans); font-size: 9px; letter-spacing: 2.5px; text-transform: uppercase; color: var(--gold-mid); margin-bottom: 12px; }
+  .formula-eq {
+    font-family: var(--sans); font-size: 12px; font-weight: 300;
+    color: var(--ink-mid); line-height: 2;
+  }
+  .formula-eq strong { font-weight: 500; color: var(--gold); }
+
+  /* FOOTER */
+  .site-footer {
+    background: var(--ink); padding: 28px 80px;
+    display: flex; justify-content: space-between; align-items: center;
+    border-top: 1px solid rgba(255,255,255,0.08);
+  }
+  .f-brand { font-family: var(--serif); font-size: 18px; color: rgba(255,255,255,0.8); }
+  .f-disc { font-family: var(--sans); font-size: 9px; font-weight: 300; line-height: 1.8; color: rgba(255,255,255,0.2); text-align: right; }
+
+  /* RESPONSIVE */
+  @media (max-width: 900px) {
+    .page-body { grid-template-columns: 1fr; padding: 0 24px 60px; }
+    .sidebar { padding-top: 0; }
+    .score-card { position: static; }
+    .hero-strip { padding: 24px 24px 20px; }
+    .site-header { padding: 0 24px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <a href="#" class="logo-wrap">
+    <span class="logo-name">Dig Appraisals</span>
+    <span class="internal-badge">Internal</span>
+  </a>
+  <nav class="header-nav">
+    <a href="irsay-report.html">Irsay Report</a>
+    <a href="#" class="active">DIG Score Calculator</a>
+  </nav>
+</header>
+
+<div class="hero-strip">
+  <div class="hero-eyebrow">Proprietary Scoring Framework</div>
+  <h1 class="hero-title">DIG Score Calculator</h1>
+  <p class="hero-deck">Four-factor scoring model for memorabilia appraisal. Score is 0–100 and combines provenance specificity, artist tier, object class, and curatorial importance. Internal use only — do not share formula weights.</p>
+</div>
+
+<div class="page-body">
+
+  <!-- CALCULATOR -->
+  <div class="calc-panel">
+
+    <div class="item-inputs">
+      <div class="input-row">
+        <label class="input-label">Item description</label>
+        <input class="text-input" type="text" id="itemName" placeholder="e.g. Jimi Hendrix Woodstock Stratocaster" />
+      </div>
+      <div class="input-row-2">
+        <div>
+          <label class="input-label">Category</label>
+          <select class="text-input" id="itemCat" style="cursor:pointer">
+            <option>Guitars</option>
+            <option>Instruments</option>
+            <option>Lyrics</option>
+            <option>Music Manuscripts</option>
+            <option>Film Manuscripts</option>
+            <option>Costumes</option>
+            <option>Autographs</option>
+            <option>Awards</option>
+            <option>Personal Items</option>
+          </select>
+        </div>
+        <div>
+          <label class="input-label">Acquisition price (optional)</label>
+          <input class="text-input" type="text" id="itemPrice" placeholder="e.g. $250,000" />
+        </div>
+      </div>
+    </div>
+
+    <!-- FACTOR P -->
+    <div class="factor-block">
+      <div class="factor-header">
+        <div class="factor-left">
+          <div class="factor-icon fi-p">P</div>
+          <div>
+            <div class="factor-name">Provenance Specificity</div>
+            <div class="factor-weight">40% weight</div>
+          </div>
+        </div>
+        <div class="factor-score" id="scoreP">—</div>
+      </div>
+      <div class="factor-body">
+        <div class="factor-desc">How specifically can the item be placed at a culturally defining moment? The more precise and the more culturally resonant the moment, the higher the score.</div>
+        <div class="option-list" id="options-P">
+          <label class="option-item" data-factor="P" data-val="4">
+            <input type="radio" name="P" value="4">
+            <div class="option-dot"></div>
+            <div class="option-value">4</div>
+            <div class="option-text">Used at a specific named iconic moment
+              <span class="option-sub">e.g. MTV Unplugged acoustic, Smells Like Teen Spirit video, Woodstock performance</span>
+            </div>
+          </label>
+          <label class="option-item" data-factor="P" data-val="3">
+            <input type="radio" name="P" value="3">
+            <div class="option-dot"></div>
+            <div class="option-value">3</div>
+            <div class="option-text">Primary instrument or stage piece of a major artist
+              <span class="option-sub">e.g. Gilmour's Black Strat, Garcia's Tiger — defining instrument, no single moment</span>
+            </div>
+          </label>
+          <label class="option-item" data-factor="P" data-val="2">
+            <input type="radio" name="P" value="2">
+            <div class="option-dot"></div>
+            <div class="option-value">2</div>
+            <div class="option-text">Secondary stage or personal use instrument
+              <span class="option-sub">e.g. touring guitar, personal notebook, secondary stage costume</span>
+            </div>
+          </label>
+          <label class="option-item" data-factor="P" data-val="1">
+            <input type="radio" name="P" value="1">
+            <div class="option-dot"></div>
+            <div class="option-value">1</div>
+            <div class="option-text">Gifted, associated, or signed — no direct use
+              <span class="option-sub">e.g. guitar given to another person, signed merchandise, promo items</span>
+            </div>
+          </label>
+          <label class="option-item" data-factor="P" data-val="0">
+            <input type="radio" name="P" value="0">
+            <div class="option-dot"></div>
+            <div class="option-value">0</div>
+            <div class="option-text">Personal item with no performance connection
+              <span class="option-sub">e.g. jewellery, clothing not used on stage, non-performance personal effects</span>
+            </div>
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <!-- FACTOR A -->
+    <div class="factor-block">
+      <div class="factor-header">
+        <div class="factor-left">
+          <div class="factor-icon fi-a">A</div>
+          <div>
+            <div class="factor-name">Artist Tier</div>
+            <div class="factor-weight">25% weight</div>
+          </div>
+        </div>
+        <div class="factor-score" id="scoreA">—</div>
+      </div>
+      <div class="factor-body">
+        <div class="factor-desc">Where does the artist sit in the cultural canon? Tier 1 artists are those who fundamentally shaped an era — universally canonical across generations.</div>
+        <div class="option-list" id="options-A">
+          <label class="option-item" data-factor="A" data-val="4">
+            <input type="radio" name="A" value="4">
+            <div class="option-dot"></div>
+            <div class="option-value">4</div>
+            <div class="option-text">Tier 1 — Defining voice of an era, universally canonical
+              <span class="option-sub">Beatles, Dylan, Hendrix, Miles Davis, Coltrane, Elvis, Bowie, Prince, Zeppelin</span>
+            </div>
+          </label>
+          <label class="option-item" data-factor="A" data-val="3">
+            <input type="radio" name="A" value="3">
+            <div class="option-dot"></div>
+            <div class="option-value">3</div>
+            <div class="option-text">Tier 2 — Major artist, globally recognised, strong collector base
+              <span class="option-sub">Cobain, Van Halen, Clapton, Lou Reed, Joplin, Springsteen, U2, Radiohead</span>
+            </div>
+          </label>
+          <label class="option-item" data-factor="A" data-val="2">
+            <input type="radio" name="A" value="2">
+            <div class="option-dot"></div>
+            <div class="option-value">2</div>
+            <div class="option-text">Tier 3 — Significant, strong within a genre or era
+              <span class="option-sub">Don McLean, Journey, Fleetwood Mac individual members, Stallone (film)</span>
+            </div>
+          </label>
+          <label class="option-item" data-factor="A" data-val="1">
+            <input type="radio" name="A" value="1">
+            <div class="option-dot"></div>
+            <div class="option-value">1</div>
+            <div class="option-text">Tier 4 — Notable, specialist collector interest
+              <span class="option-sub">Genre-specific or regional artists with dedicated but limited following</span>
+            </div>
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <!-- FACTOR O -->
+    <div class="factor-block">
+      <div class="factor-header">
+        <div class="factor-left">
+          <div class="factor-icon fi-o">O</div>
+          <div>
+            <div class="factor-name">Object Class</div>
+            <div class="factor-weight">20% weight</div>
+          </div>
+        </div>
+        <div class="factor-score" id="scoreO">—</div>
+      </div>
+      <div class="factor-body">
+        <div class="factor-desc">What type of object is it? Instruments that were actually played score highest. Unique or custom-made objects command the top tier.</div>
+        <div class="option-list" id="options-O">
+          <label class="option-item" data-factor="O" data-val="4">
+            <input type="radio" name="O" value="4">
+            <div class="option-dot"></div>
+            <div class="option-value">4</div>
+            <div class="option-text">Custom-built, prototype, or unique instrument
+              <span class="option-sub">e.g. custom-commissioned trumpet, one-of-a-kind prototype, artist-modified instrument</span>
+            </div>
+          </label>
+          <label class="option-item" data-factor="O" data-val="3">
+            <input type="radio" name="O" value="3">
+            <div class="option-dot"></div>
+            <div class="option-value">3</div>
+            <div class="option-text">Primary performance instrument (production model)
+              <span class="option-sub">Standard-production guitar, piano, or instrument used on stage or in recording</span>
+            </div>
+          </label>
+          <label class="option-item" data-factor="O" data-val="2">
+            <input type="radio" name="O" value="2">
+            <div class="option-dot"></div>
+            <div class="option-value">2</div>
+            <div class="option-text">Original manuscript, costume, or significant artefact
+              <span class="option-sub">Handwritten lyrics, stage costume, film prop, document with historical significance</span>
+            </div>
+          </label>
+          <label class="option-item" data-factor="O" data-val="1">
+            <input type="radio" name="O" value="1">
+            <div class="option-dot"></div>
+            <div class="option-value">1</div>
+            <div class="option-text">Award, poster, programme, personal effect
+              <span class="option-sub">RIAA plaques, gold discs, signed posters, personal jewellery, non-stage clothing</span>
+            </div>
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <!-- FACTOR H -->
+    <div class="factor-block">
+      <div class="factor-header">
+        <div class="factor-left">
+          <div class="factor-icon fi-h">H</div>
+          <div>
+            <div class="factor-name">Curatorial Importance</div>
+            <div class="factor-weight">15% weight</div>
+          </div>
+        </div>
+        <div class="factor-score" id="scoreH">—</div>
+      </div>
+      <div class="factor-body">
+        <div class="factor-desc">Expert curatorial rating: how important is this item within its category, relative to all items by this artist and in this genre? 10 = most important example in existence.</div>
+        <div class="helen-slider-wrap">
+          <input type="range" id="helenSlider" min="1" max="10" value="5" oninput="updateHelen(this.value)">
+          <div class="helen-val" id="helenVal">5</div>
+        </div>
+        <div class="helen-scale">
+          <span>1 — Minor significance</span>
+          <span>5 — Notable</span>
+          <span>10 — Most important</span>
+        </div>
+      </div>
+    </div>
+
+    <button class="calc-btn" onclick="calculate()">Calculate DIG Score</button>
+
+  </div>
+
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+
+    <div class="score-card">
+      <div class="score-label">DIG Score</div>
+      <div class="score-number" id="mainScore">—</div>
+      <div class="score-tier" id="scoreTier" style="color:rgba(255,255,255,0.4)">Enter values to score</div>
+      <div class="score-rule"></div>
+
+      <div class="breakdown-row">
+        <div class="breakdown-head">
+          <span class="breakdown-name">Provenance (P)</span>
+          <span class="breakdown-pts" id="ptP">—</span>
+        </div>
+        <div class="breakdown-track"><div class="breakdown-fill fill-p" id="barP" style="width:0%"></div></div>
+      </div>
+      <div class="breakdown-row">
+        <div class="breakdown-head">
+          <span class="breakdown-name">Artist Tier (A)</span>
+          <span class="breakdown-pts" id="ptA">—</span>
+        </div>
+        <div class="breakdown-track"><div class="breakdown-fill fill-a" id="barA" style="width:0%"></div></div>
+      </div>
+      <div class="breakdown-row">
+        <div class="breakdown-head">
+          <span class="breakdown-name">Object Class (O)</span>
+          <span class="breakdown-pts" id="ptO">—</span>
+        </div>
+        <div class="breakdown-track"><div class="breakdown-fill fill-o" id="barO" style="width:0%"></div></div>
+      </div>
+      <div class="breakdown-row">
+        <div class="breakdown-head">
+          <span class="breakdown-name">Curatorial (H)</span>
+          <span class="breakdown-pts" id="ptH">—</span>
+        </div>
+        <div class="breakdown-track"><div class="breakdown-fill fill-h" id="barH" style="width:0%"></div></div>
+      </div>
+    </div>
+
+    <div class="rank-panel" id="rankPanel">
+      <div class="rank-label">Irsay Benchmark — Where it ranks</div>
+      <div id="rankRows"><div style="font-family:var(--sans);font-size:12px;font-weight:300;color:var(--ink-faint);padding:8px 0">Score an item to see where it ranks against the 35 Irsay lots.</div></div>
+    </div>
+
+    <div class="formula-panel">
+      <div class="formula-title">Score Formula</div>
+      <div class="formula-eq">
+        DIG = <strong>(P/4 × 40)</strong> + <strong>(A/4 × 25)</strong><br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ <strong>(O/4 × 20)</strong> + <strong>(H/10 × 15)</strong>
+        <br><br>
+        Range: 0 – 100<br>
+        Weights: P=40% · A=25% · O=20% · H=15%
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div>
+    <div class="f-brand">Dig Appraisals</div>
+  </div>
+  <div class="f-disc">Internal tool — not for distribution.<br>Formula and weights are proprietary. © 2026 Dig Appraisals.</div>
+</footer>
+
+<script>
+// All 35 Irsay lots with their pre-computed DIG scores
+const benchmark = [
+  { name: "Clapton Martin 000-42 (MTV Unplugged)",  dig: 95, mult: 5.2 },
+  { name: "Harrison Gibson SG (Revolver)",           dig: 95, mult: 4.0 },
+  { name: "Lennon Gretsch (Paperback Writer)",       dig: 95, mult: 2.1 },
+  { name: "Beatles Ed Sullivan Drumhead",            dig: 95, mult: 1.4 },
+  { name: "McCartney Hey Jude Lyrics",               dig: 90, mult: 1.1 },
+  { name: "Bob Dylan Times Lyrics",                  dig: 90, mult: 3.4 },
+  { name: "Miles Davis Trumpet",                     dig: 90, mult: 5.1 },
+  { name: "Bob Dylan Hummingbird (Inauguration)",    dig: 89, mult: 2.1 },
+  { name: "Cobain Mustang (Teen Spirit video)",      dig: 89, mult: 1.5 },
+  { name: "Coltrane Prototype Saxophone",            dig: 87, mult: 3.5 },
+  { name: "Jerry Garcia Tiger Guitar",               dig: 85, mult: 12.1 },
+  { name: "Gilmour Black Stratocaster",              dig: 85, mult: 3.7 },
+  { name: "Clapton The Fool Gibson SG",              dig: 85, mult: 2.4 },
+  { name: "Lennon Broadwood Piano",                  dig: 85, mult: 5.6 },
+  { name: "Ringo Starr Beatles Drumkit",             dig: 85, mult: 1.1 },
+  { name: "McVie Alembic Bass (Rumours)",            dig: 84, mult: 1.8 },
+  { name: "Prince Yellow Cloud Guitar",              dig: 80, mult: 4.6 },
+  { name: "Gilmour Martin D-35",                     dig: 75, mult: 2.2 },
+  { name: "Lou Reed Telecaster Goldie",              dig: 74, mult: 4.5 },
+  { name: "Eddie Van Halen Charvel",                 dig: 71, mult: 4.7 },
+  { name: "Jim Morrison Notebook",                   dig: 71, mult: 1.7 },
+  { name: "Lennon/Harrison Vox Kensington",          dig: 72, mult: 1.5 },
+  { name: "George Harrison Harptone",                dig: 70, mult: 5.0 },
+  { name: "Ringo Second Ludwig Drum",                dig: 70, mult: 1.3 },
+  { name: "McCartney Affidavit",                     dig: 68, mult: 1.3 },
+  { name: "Janis Joplin J-45",                       dig: 67, mult: 1.9 },
+  { name: "U2 Edge Explorer",                        dig: 64, mult: 1.5 },
+  { name: "Sly Stallone Rocky Script",               dig: 64, mult: 1.2 },
+  { name: "James Brown Cape",                        dig: 64, mult: 3.5 },
+  { name: "Don McLean Martin 00-21",                 dig: 78, mult: 1.5 },
+  { name: "Neal Schon Les Paul",                     dig: 78, mult: 1.0 },
+  { name: "Ringo RIAA Award",                        dig: 54, mult: 2.3 },
+  { name: "Lennon Rickenbacker (given to Ringo)",    dig: 65, mult: 1.4 },
+  { name: "Beatles Sgt Pepper Poster",               dig: 40, mult: 3.4 },
+  { name: "Ringo Starr Pinky Ring",                  dig: 40, mult: 1.1 },
+].sort((a, b) => b.dig - a.dig);
+
+let selections = { P: null, A: null, O: null, H: 5 };
+
+// Option click handlers
+document.querySelectorAll('.option-item').forEach(el => {
+  el.addEventListener('click', () => {
+    const factor = el.dataset.factor;
+    const val = parseInt(el.dataset.val);
+    selections[factor] = val;
+
+    document.querySelectorAll(`[data-factor="${factor}"]`).forEach(o => o.classList.remove('selected'));
+    el.classList.add('selected');
+
+    updateLive();
+  });
+});
+
+function updateHelen(v) {
+  selections.H = parseInt(v);
+  document.getElementById('helenVal').textContent = v;
+  updateLive();
+}
+
+function updateLive() {
+  const { P, A, O, H } = selections;
+  if (P === null || A === null || O === null) return;
+
+  const pPts = (P / 4) * 40;
+  const aPts = (A / 4) * 25;
+  const oPts = (O / 4) * 20;
+  const hPts = (H / 10) * 15;
+  const total = Math.round(pPts + aPts + oPts + hPts);
+
+  document.getElementById('scoreP').textContent = Math.round(pPts);
+  document.getElementById('scoreA').textContent = Math.round(aPts);
+  document.getElementById('scoreO').textContent = Math.round(oPts);
+  document.getElementById('scoreH').textContent = Math.round(hPts);
+
+  calculate();
+}
+
+function calculate() {
+  const { P, A, O, H } = selections;
+  if (P === null || A === null || O === null) {
+    return;
+  }
+
+  const pPts = Math.round((P / 4) * 40);
+  const aPts = Math.round((A / 4) * 25);
+  const oPts = Math.round((O / 4) * 20);
+  const hPts = Math.round((H / 10) * 15);
+  const total = pPts + aPts + oPts + hPts;
+
+  // Score display
+  document.getElementById('mainScore').textContent = total;
+
+  // Tier
+  let tier, tierColor;
+  if (total >= 85) { tier = 'Museum Grade'; tierColor = '#C9A84C'; }
+  else if (total >= 70) { tier = 'Investment Grade'; tierColor = '#4D9E75'; }
+  else if (total >= 55) { tier = 'Collector Grade'; tierColor = '#7A7670'; }
+  else { tier = 'Below Threshold'; tierColor = '#8C2D2D'; }
+
+  const tierEl = document.getElementById('scoreTier');
+  tierEl.textContent = tier;
+  tierEl.style.color = tierColor;
+
+  // Breakdown bars
+  document.getElementById('ptP').textContent = pPts + ' pts';
+  document.getElementById('ptA').textContent = aPts + ' pts';
+  document.getElementById('ptO').textContent = oPts + ' pts';
+  document.getElementById('ptH').textContent = hPts + ' pts';
+  document.getElementById('barP').style.width = (pPts / 40 * 100) + '%';
+  document.getElementById('barA').style.width = (aPts / 25 * 100) + '%';
+  document.getElementById('barO').style.width = (oPts / 20 * 100) + '%';
+  document.getElementById('barH').style.width = (hPts / 15 * 100) + '%';
+
+  // Ranking
+  const name = document.getElementById('itemName').value || 'This item';
+  const allItems = [...benchmark, { name, dig: total, isCurrent: true }].sort((a, b) => b.dig - a.dig);
+  const currentIdx = allItems.findIndex(i => i.isCurrent);
+
+  // Show 2 above, current, 2 below
+  const start = Math.max(0, currentIdx - 2);
+  const end = Math.min(allItems.length - 1, currentIdx + 2);
+  const slice = allItems.slice(start, end + 1);
+
+  const rankRows = document.getElementById('rankRows');
+  rankRows.innerHTML = '';
+
+  if (start > 0) {
+    const div = document.createElement('div');
+    div.className = 'rank-divider';
+    div.innerHTML = `<div style="text-align:center;font-family:var(--sans);font-size:9px;color:var(--ink-faint);letter-spacing:1px;padding:2px 0">${start} lots above</div>`;
+    rankRows.appendChild(div);
+  }
+
+  slice.forEach((item, i) => {
+    const globalPos = start + i + 1;
+    const row = document.createElement('div');
+    row.className = 'rank-row' + (item.isCurrent ? ' highlight' : '');
+    row.innerHTML = `
+      <span class="rank-pos">#${globalPos}</span>
+      <span class="rank-name">${item.name}${item.isCurrent ? ' ★' : ''}</span>
+      <span class="rank-score">${item.dig}</span>
+    `;
+    rankRows.appendChild(row);
+  });
+
+  if (end < allItems.length - 1) {
+    const div = document.createElement('div');
+    div.innerHTML = `<div style="text-align:center;font-family:var(--sans);font-size:9px;color:var(--ink-faint);letter-spacing:1px;padding:4px 0">${allItems.length - 1 - end} lots below</div>`;
+    rankRows.appendChild(div);
+  }
+}
+</script>
+</body>
+</html>
