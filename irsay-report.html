@@ -834,12 +834,47 @@
     </div>
   </div>
 
-  <!-- SCATTER -->
+  <!-- QUADRANT -->
   <div class="section">
-    <div class="s-eye">Risk / Return</div>
-    <h2 class="s-head">CAGR vs Hold Period — All 35 Lots</h2>
-    <p style="font-family:var(--sans);font-size:13px;font-weight:300;color:var(--ink-light);margin-bottom:24px;max-width:560px;line-height:1.8;">Bubble size = 2026 realized value. Hover any lot for details. The short-hold jazz cluster (top-left) is the clearest argument for a tactical acquisition strategy.</p>
-    <div style="position:relative;width:100%;height:320px;"><canvas id="scatterChart"></canvas></div>
+    <div class="s-eye">Return Framework</div>
+    <h2 class="s-head">Hold Period vs Money Multiple</h2>
+    <p style="font-family:var(--sans);font-size:13px;font-weight:300;color:var(--ink-light);margin-bottom:28px;max-width:580px;line-height:1.8;">Each dot is one lot. Axes split at 3× multiple and 7-year hold — the natural medians of this portfolio. Hover any dot for details. Colour by category.</p>
+
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--rule);border:1px solid var(--rule);margin-bottom:28px;">
+      <div style="background:var(--white);padding:14px 16px;">
+        <div style="font-family:var(--sans);font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--gold-mid);margin-bottom:4px;">Sweet Spot</div>
+        <div style="font-family:var(--serif);font-size:22px;color:var(--ink);">7 lots</div>
+        <div style="font-family:var(--sans);font-size:11px;font-weight:300;color:var(--ink-light);margin-top:2px;">≥3× · ≤7 yr hold</div>
+      </div>
+      <div style="background:var(--white);padding:14px 16px;">
+        <div style="font-family:var(--sans);font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--ink-faint);margin-bottom:4px;">Patient Money</div>
+        <div style="font-family:var(--serif);font-size:22px;color:var(--ink);">7 lots</div>
+        <div style="font-family:var(--sans);font-size:11px;font-weight:300;color:var(--ink-light);margin-top:2px;">≥3× · >7 yr hold</div>
+      </div>
+      <div style="background:var(--white);padding:14px 16px;">
+        <div style="font-family:var(--sans);font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--ink-faint);margin-bottom:4px;">Underdelivered</div>
+        <div style="font-family:var(--serif);font-size:22px;color:var(--ink);">11 lots</div>
+        <div style="font-family:var(--sans);font-size:11px;font-weight:300;color:var(--ink-light);margin-top:2px;">&lt;3× · ≤7 yr hold</div>
+      </div>
+      <div style="background:var(--white);padding:14px 16px;">
+        <div style="font-family:var(--sans);font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--red);margin-bottom:4px;">Avoid</div>
+        <div style="font-family:var(--serif);font-size:22px;color:var(--ink);">10 lots</div>
+        <div style="font-family:var(--sans);font-size:11px;font-weight:300;color:var(--ink-light);margin-top:2px;">&lt;3× · >7 yr hold</div>
+      </div>
+    </div>
+
+    <div id="quadrant-wrap" style="position:relative;width:100%;height:420px;">
+      <canvas id="quadrantChart"></canvas>
+      <!-- Quadrant labels rendered after chart -->
+    </div>
+
+    <div style="display:flex;align-items:center;gap:20px;margin-top:20px;flex-wrap:wrap;">
+      <div style="font-family:var(--sans);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--ink-faint);">Category</div>
+      <div style="display:flex;align-items:center;gap:6px;font-family:var(--sans);font-size:11px;font-weight:300;color:var(--ink-light);"><span style="width:8px;height:8px;border-radius:50%;background:#8C6D2F;display:inline-block"></span>Guitars</div>
+      <div style="display:flex;align-items:center;gap:6px;font-family:var(--sans);font-size:11px;font-weight:300;color:var(--ink-light);"><span style="width:8px;height:8px;border-radius:50%;background:#2E5A8E;display:inline-block"></span>Instruments</div>
+      <div style="display:flex;align-items:center;gap:6px;font-family:var(--sans);font-size:11px;font-weight:300;color:var(--ink-light);"><span style="width:8px;height:8px;border-radius:50%;background:#2D6645;display:inline-block"></span>Lyrics</div>
+      <div style="display:flex;align-items:center;gap:6px;font-family:var(--sans);font-size:11px;font-weight:300;color:var(--ink-light);"><span style="width:8px;height:8px;border-radius:50%;background:#B8B4AC;display:inline-block"></span>Other</div>
+    </div>
   </div>
 
   <!-- LOT TABLE -->
@@ -1022,54 +1057,118 @@ new Chart(document.getElementById('holdChart'), {
   }
 });
 
-// Scatter — all 35 lots, real data
-const catColors = { Guitars:'#8C6D2F', Instruments:'#2E5A8E', Lyrics:'#2D6645', 'Film MSS':'#B8B4AC', 'Music MSS':'#B8B4AC', Autographs:'#C07040', Awards:'#B8B4AC', Costumes:'#7A5A8C', Personal:'#B8B4AC' };
+// Quadrant chart
+const catColor = { Guitars:'#8C6D2F', Instruments:'#2E5A8E', Lyrics:'#2D6645', 'Film MSS':'#B8B4AC', 'Music MSS':'#B8B4AC', Autographs:'#C07040', Awards:'#B8B4AC', Costumes:'#9A6A4C', Personal:'#B8B4AC' };
 
-new Chart(document.getElementById('scatterChart'), {
-  type: 'bubble',
+const quadrantData = lots.map(l => ({
+  x: l.years,
+  y: parseFloat((l.sell / l.buy).toFixed(2)),
+  label: l.desc,
+  sub: l.sub,
+  cat: l.cat,
+  ret: Math.round(l.ret),
+  cagr: l.cagr.toFixed(1)
+}));
+
+const qCtx = document.getElementById('quadrantChart').getContext('2d');
+
+// Draw quadrant background regions as a plugin
+const quadrantBg = {
+  id: 'quadrantBg',
+  beforeDraw(chart) {
+    const { ctx, chartArea: { left, right, top, bottom }, scales: { x, y } } = chart;
+    const midX = x.getPixelForValue(7);
+    const midY = y.getPixelForValue(3);
+    ctx.save();
+    // TL — sweet spot (very light gold)
+    ctx.fillStyle = 'rgba(140,109,47,0.04)';
+    ctx.fillRect(left, top, midX - left, midY - top);
+    // TR — patient money (neutral)
+    ctx.fillStyle = 'rgba(0,0,0,0.015)';
+    ctx.fillRect(midX, top, right - midX, midY - top);
+    // BL — underdelivered
+    ctx.fillStyle = 'rgba(0,0,0,0.015)';
+    ctx.fillRect(left, midY, midX - left, bottom - midY);
+    // BR — avoid (faint red)
+    ctx.fillStyle = 'rgba(140,45,45,0.04)';
+    ctx.fillRect(midX, midY, right - midX, bottom - midY);
+
+    // Quadrant divider lines
+    ctx.strokeStyle = '#D8D4CE';
+    ctx.lineWidth = 1;
+    ctx.setLineDash([4, 4]);
+    ctx.beginPath(); ctx.moveTo(midX, top); ctx.lineTo(midX, bottom); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(left, midY); ctx.lineTo(right, midY); ctx.stroke();
+    ctx.setLineDash([]);
+
+    // Quadrant labels
+    ctx.font = "500 9px 'Jost', sans-serif";
+    ctx.letterSpacing = '2px';
+    ctx.fillStyle = 'rgba(140,109,47,0.55)';
+    ctx.fillText('SWEET SPOT', left + 10, top + 16);
+    ctx.fillStyle = 'rgba(0,0,0,0.18)';
+    ctx.fillText('PATIENT MONEY', midX + 10, top + 16);
+    ctx.fillStyle = 'rgba(0,0,0,0.18)';
+    ctx.fillText('UNDERDELIVERED', left + 10, bottom - 8);
+    ctx.fillStyle = 'rgba(140,45,45,0.45)';
+    ctx.fillText('AVOID', midX + 10, bottom - 8);
+    ctx.restore();
+  }
+};
+
+new Chart(qCtx, {
+  type: 'scatter',
+  plugins: [quadrantBg],
   data: {
     datasets: [{
-      data: lots.map(l => ({
-        x: l.years,
-        y: parseFloat(l.cagr.toFixed(1)),
-        r: Math.max(4, Math.sqrt(l.sell / 130000) * 1.5),
-        label: l.desc.substring(0, 34),
-        cat: l.cat
-      })),
-      backgroundColor: lots.map(l => catColors[l.cat] + '33'),
-      borderColor: lots.map(l => catColors[l.cat]),
-      borderWidth: 1.5
+      data: quadrantData,
+      backgroundColor: quadrantData.map(d => catColor[d.cat] + 'CC'),
+      borderColor: quadrantData.map(d => catColor[d.cat]),
+      borderWidth: 1,
+      pointRadius: 6,
+      pointHoverRadius: 8
     }]
   },
   options: {
-    responsive: true, maintainAspectRatio: false,
+    responsive: true,
+    maintainAspectRatio: false,
+    layout: { padding: { top: 8, right: 16, bottom: 8, left: 8 } },
     plugins: {
       legend: { display: false },
       tooltip: {
         callbacks: {
-          label: ctx => [`${ctx.raw.label}`, `Hold: ${ctx.raw.x}y · CAGR: +${ctx.raw.y}%`]
+          title: ctx => ctx[0].raw.label,
+          label: ctx => [
+            `${ctx.raw.sub}`,
+            `Hold: ${ctx.raw.x} yr  ·  Multiple: ${ctx.raw.y}×`,
+            `Total return: +${ctx.raw.ret}%  ·  CAGR: +${ctx.raw.cagr}%`
+          ]
         },
-        bodyFont: { family: "'Jost', sans-serif", size: 11 },
+        titleFont: { family: "'Jost', sans-serif", size: 12, weight: '500' },
+        bodyFont: { family: "'Jost', sans-serif", size: 11, weight: '300' },
         backgroundColor: '#1A1814',
+        titleColor: '#FAF8F4',
+        bodyColor: '#B8B4AC',
         borderColor: '#8C6D2F',
         borderWidth: 1,
-        padding: 10
+        padding: 12,
+        displayColors: false
       }
     },
     scales: {
       x: {
         title: { display: true, text: 'Hold period (years)', color: '#B8B4AC', font: { family: "'Jost', sans-serif", size: 9 } },
-        ticks: { color: '#B8B4AC', font: { family: "'Jost', sans-serif", size: 9 } },
+        ticks: { color: '#B8B4AC', font: { family: "'Jost', sans-serif", size: 9 }, stepSize: 2 },
         grid: { color: '#EEEBE6' },
         border: { color: '#E2DED8' },
         min: 0, max: 26
       },
       y: {
-        title: { display: true, text: 'CAGR (%)', color: '#B8B4AC', font: { family: "'Jost', sans-serif", size: 9 } },
-        ticks: { color: '#B8B4AC', font: { family: "'Jost', sans-serif", size: 9 }, callback: v => v + '%' },
+        title: { display: true, text: 'Money multiple (realized / cost)', color: '#B8B4AC', font: { family: "'Jost', sans-serif", size: 9 } },
+        ticks: { color: '#B8B4AC', font: { family: "'Jost', sans-serif", size: 9 }, callback: v => v + '×' },
         grid: { color: '#EEEBE6' },
         border: { color: 'transparent' },
-        min: -2, max: 75
+        min: 0, max: 14
       }
     }
   }
