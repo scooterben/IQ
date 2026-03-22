@@ -637,7 +637,7 @@
   <div>
     <div class="hero-eyebrow">Collector Portfolio Research</div>
     <h1 class="hero-title">The Irsay Collection<br><em>Return Attribution &amp; Market Analysis</em></h1>
-    <p class="hero-deck">A specialist appraisal of the Jim Irsay auction portfolio — tracking cost basis against 2026 estimated values across 35 lots of guitars, instruments, lyrics, manuscripts, and personal artefacts acquired over a 24-year window.</p>
+    <p class="hero-deck">A specialist appraisal of the Jim Irsay auction portfolio — tracking cost basis against 2026 realized sale prices across 35 lots of guitars, instruments, lyrics, manuscripts, and personal artefacts. All values are auction-realized, not marks or estimates.</p>
     <div class="hero-chips">
       <span class="chip chip-green">Overweight · Guitar-Grade Memorabilia</span>
       <span class="chip chip-plain">Rock &amp; Jazz Provenance</span>
@@ -647,7 +647,7 @@
   </div>
   <div class="hero-aside">
     <div>
-      <div class="aside-label">2026 Estimated Value</div>
+      <div class="aside-label">2026 Realized Value</div>
       <div class="aside-value">$68.0M</div>
       <div class="aside-hint up">↑ From $25.0M cost basis</div>
     </div>
@@ -655,13 +655,13 @@
     <div>
       <div class="aside-label">Total Return</div>
       <div class="aside-value">+172%</div>
-      <div class="aside-hint up">+$43.0M unrealised gain</div>
+      <div class="aside-hint up">+$43.0M realized gain</div>
     </div>
     <div class="aside-rule"></div>
     <div>
       <div class="aside-label">Portfolio CAGR</div>
-      <div class="aside-value">11.9%</div>
-      <div class="aside-hint">Avg hold period: 9.1 years</div>
+      <div class="aside-value">11.4%</div>
+      <div class="aside-hint">Avg hold period: 9.3 years</div>
     </div>
   </div>
 </div>
@@ -683,7 +683,7 @@
       <div class="metric-cell fa fa-2">
         <div class="m-label">Net Gain</div>
         <div class="m-val">$43.0M</div>
-        <div class="m-hint up">Unrealised appreciation</div>
+        <div class="m-hint up">Realized gain</div>
       </div>
       <div class="metric-cell fa fa-3">
         <div class="m-label">Top Sector</div>
@@ -723,14 +723,14 @@
         <div class="c-body">Guitars represent $52.2M of the $68M estimated value. While the category has delivered +205% total return, the illiquidity profile and insurance cost of this concentration is material. Instruments and lyrics diversify the return base but remain underweight.</div>
         <div class="c-stat">
           <span class="c-num">76.8%</span>
-          <span class="c-desc">Guitar weight by current value</span>
+          <span class="c-desc">Guitar weight by realized value</span>
         </div>
       </div>
     </div>
 
     <!-- PULLQUOTE -->
     <blockquote class="pullquote">
-      <p>The Irsay collection demonstrates the asymmetric return profile of museum-grade provenance at scale. Instruments tied to defining cultural moments — Gilmour's Black Strat, Garcia's Tiger — command scarcity premiums that compress correlation with public equities to near zero, making them a structurally distinct asset class.</p>
+      <p>The Irsay collection demonstrates the asymmetric return profile of museum-grade provenance at scale. Instruments tied to defining cultural moments command scarcity premiums that compress correlation with public equities to near zero — but the data shows hold period structure matters equally: the 4–7 year bucket averaged 17.9% CAGR across 15 lots, against just 5.6% for the 8–12 year cohort. The 20+ year outliers partially recover due to extreme early undervaluation at acquisition.</p>
       <cite>Dig Appraisals Research · March 2026</cite>
     </blockquote>
   </div>
@@ -827,10 +827,19 @@
 
         <div class="hold-block">
           <div class="panel-label">Avg CAGR by Holding Period</div>
+          <p style="font-family:var(--sans);font-size:10px;font-weight:300;color:var(--ink-faint);line-height:1.7;margin-bottom:12px;">Arithmetic avg of per-lot CAGRs. 20+ yr recovery (8.3%) reflects Garcia &amp; Harrison extreme early undervaluation, not a reversal of the hold-period effect.</p>
           <div class="hold-canvas"><canvas id="holdChart"></canvas></div>
         </div>
       </div>
     </div>
+  </div>
+
+  <!-- SCATTER -->
+  <div class="section">
+    <div class="s-eye">Risk / Return</div>
+    <h2 class="s-head">CAGR vs Hold Period — All 35 Lots</h2>
+    <p style="font-family:var(--sans);font-size:13px;font-weight:300;color:var(--ink-light);margin-bottom:24px;max-width:560px;line-height:1.8;">Bubble size = 2026 realized value. Hover any lot for details. The short-hold jazz cluster (top-left) is the clearest argument for a tactical acquisition strategy.</p>
+    <div style="position:relative;width:100%;height:320px;"><canvas id="scatterChart"></canvas></div>
   </div>
 
   <!-- LOT TABLE -->
@@ -843,7 +852,7 @@
           <th>Lot</th>
           <th class="r">Acquired</th>
           <th class="r">Cost Basis</th>
-          <th class="r">2026 Value</th>
+          <th class="r">2026 Realized</th>
           <th class="r">Total Return</th>
           <th class="r">CAGR</th>
           <th class="r">Rating</th>
@@ -985,7 +994,7 @@ new Chart(document.getElementById('holdChart'), {
   data: {
     labels: ['1–3 yr', '4–7 yr', '8–12 yr', '13–20 yr', '20+ yr'],
     datasets: [{
-      data: [35.2, 18.4, 9.1, 6.2, 4.8],
+      data: [43.1, 17.9, 5.6, 5.2, 8.3],
       backgroundColor: '#8C6D2F',
       borderRadius: 2,
       borderSkipped: false
@@ -1008,6 +1017,59 @@ new Chart(document.getElementById('holdChart'), {
         ticks: { color: '#B8B4AC', font: { family: "'Jost', sans-serif", size: 9 }, callback: v => v + '%' },
         grid: { color: '#EEEBE6' },
         border: { color: 'transparent' }
+      }
+    }
+  }
+});
+
+// Scatter — all 35 lots, real data
+const catColors = { Guitars:'#8C6D2F', Instruments:'#2E5A8E', Lyrics:'#2D6645', 'Film MSS':'#B8B4AC', 'Music MSS':'#B8B4AC', Autographs:'#C07040', Awards:'#B8B4AC', Costumes:'#7A5A8C', Personal:'#B8B4AC' };
+
+new Chart(document.getElementById('scatterChart'), {
+  type: 'bubble',
+  data: {
+    datasets: [{
+      data: lots.map(l => ({
+        x: l.years,
+        y: parseFloat(l.cagr.toFixed(1)),
+        r: Math.max(4, Math.sqrt(l.sell / 130000) * 1.5),
+        label: l.desc.substring(0, 34),
+        cat: l.cat
+      })),
+      backgroundColor: lots.map(l => catColors[l.cat] + '33'),
+      borderColor: lots.map(l => catColors[l.cat]),
+      borderWidth: 1.5
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        callbacks: {
+          label: ctx => [`${ctx.raw.label}`, `Hold: ${ctx.raw.x}y · CAGR: +${ctx.raw.y}%`]
+        },
+        bodyFont: { family: "'Jost', sans-serif", size: 11 },
+        backgroundColor: '#1A1814',
+        borderColor: '#8C6D2F',
+        borderWidth: 1,
+        padding: 10
+      }
+    },
+    scales: {
+      x: {
+        title: { display: true, text: 'Hold period (years)', color: '#B8B4AC', font: { family: "'Jost', sans-serif", size: 9 } },
+        ticks: { color: '#B8B4AC', font: { family: "'Jost', sans-serif", size: 9 } },
+        grid: { color: '#EEEBE6' },
+        border: { color: '#E2DED8' },
+        min: 0, max: 26
+      },
+      y: {
+        title: { display: true, text: 'CAGR (%)', color: '#B8B4AC', font: { family: "'Jost', sans-serif", size: 9 } },
+        ticks: { color: '#B8B4AC', font: { family: "'Jost', sans-serif", size: 9 }, callback: v => v + '%' },
+        grid: { color: '#EEEBE6' },
+        border: { color: 'transparent' },
+        min: -2, max: 75
       }
     }
   }
